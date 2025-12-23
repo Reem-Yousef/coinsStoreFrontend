@@ -15,7 +15,7 @@ export default function AdminLogin({ setIsAdmin }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/packages/admin/all", {
+      const res = await fetch("https://coins-store-backend.vercel.app/api/packages/admin/all", {
         headers: { "x-admin-key": adminKey }
       });
 

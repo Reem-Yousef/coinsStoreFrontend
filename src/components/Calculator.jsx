@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const API_PACKAGES = "http://localhost:5000/api/packages";
-const API_CONTACTS = "http://localhost:5000/api/contacts";
+const API_PACKAGES = "https://coins-store-backend.vercel.app/api/packages";
+const API_CONTACTS = "https://coins-store-backend.vercel.app/api/contacts";
 
 export default function Calculator() {
   const [packages, setPackages] = useState([]);
