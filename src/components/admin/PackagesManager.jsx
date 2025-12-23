@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:5000/api/packages";
+const API = "https://coins-store-backend.vercel.app/api/packages";
 const getAdminKey = () => localStorage.getItem("adminKey");
 
 export default function PackagesManager() {

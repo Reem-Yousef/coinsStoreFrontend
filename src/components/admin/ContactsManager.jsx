@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:5000/api/contacts";
+const API = "https://coins-store-backend.vercel.app/api/contacts";
 const getAdminKey = () => localStorage.getItem("adminKey");
 
 export default function ContactsManager() {
