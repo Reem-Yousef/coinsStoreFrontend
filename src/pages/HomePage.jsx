@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calculator from "../components/Calculator";
-import demon from "/background2.png";
+import demon from "/background4.png";
 
 export default function HomePage() {
   const navigate = useNavigate();

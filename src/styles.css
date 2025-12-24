@@ -38,15 +38,15 @@ body {
 
 .hero-img {
   position: fixed;
-  bottom: 5%;
-  right: 5%;
-  height: 85vh;
-  max-width: 45vw;
+  bottom: 18%;
+  right: 20%;
+  height: 65vh;
+  max-width: 35vw;
   object-fit: contain;
   filter: drop-shadow(0 0 60px rgba(177, 0, 0, 0.5));
   pointer-events: none;
   z-index: 1;
-  animation: float 6s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -57,13 +57,13 @@ body {
 /* Calculator Card */
 .card {
   position: relative;
-  margin: 10vh auto;
+  margin: 20px auto;
   margin-left: 10%;
   margin-top: 5%;
   background: rgba(10, 0, 0, 0.85);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(220, 20, 60, 0.3);
-  padding: 10px 30px;
+  padding: 30px 30px ;
   width: min(430px, 90vw);
   border-radius: 24px;
   box-shadow: 
@@ -81,6 +81,35 @@ body {
     0 0 50px rgba(220, 20, 60, 0.25);
 }
 
+/* Red Creature at Top of Card */
+.card-mascot {
+  position: absolute;
+  top: 10%;
+  left: 23%;
+    transform: translate(-50%, -85%);
+
+  /* transform: translateX(-50%); */
+  z-index: 10;
+  pointer-events: none;
+}
+
+.card-mascot img {
+  width: clamp(90px, 20vw, 250px);
+  height: auto;
+}
+
+/* .card-mascot img { */
+  /* width: 250px; */
+  /* height: auto; */
+  /* filter: drop-shadow(0 6px 12px rgba(220, 20, 60, 0.7)); */
+  /* animation: mascotFloat 3s ease-in-out infinite; */
+/* } */
+
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
 .card-header {
   text-align: center;
   margin-bottom: 5px;
@@ -88,22 +117,22 @@ body {
 
 .card-header span{
   display: inline;
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   font-weight: 900;
 }
+
 .card-header h2 {
   display: inline-block;
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   font-weight: 900;
   background: linear-gradient(135deg, #ff4444, #cc0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* margin-bottom: 5px; */
 }
 
 .subtitle {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.95rem;
+  font-size: 0.8rem;
 }
 
 /* Input Groups */
@@ -114,7 +143,7 @@ body {
 .input-group label {
   display: block;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   margin-bottom: 5px;
   font-weight: 600;
 }
@@ -126,7 +155,7 @@ body {
   border: 2px solid rgba(220, 20, 60, 0.3);
   border-radius: 12px;
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-family: 'Cairo', sans-serif;
   transition: all 0.3s ease;
 }
@@ -191,7 +220,7 @@ body {
   border: none;
   border-radius: 12px;
   color: white;
-  font-size: 1.0rem;
+  font-size: .9rem;
   font-weight: 700;
   font-family: 'Cairo', sans-serif;
   cursor: pointer;
@@ -225,20 +254,6 @@ body {
 .btn-charge:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* Pricing Info */
-.pricing-info {
-  margin-top: 20px;
-  text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.pricing-info p {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.85rem;
-  margin: 5px 0;
 }
 
 /* Loader */
@@ -374,66 +389,6 @@ body {
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.85rem;
   z-index: 1;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-img {
-    right: 50%;
-    transform: translateX(50%);
-    height: 60vh;
-    max-width: 80vw;
-    bottom: 2%;
-  }
-
-  .card {
-    margin: 5vh auto;
-    margin-bottom: 80px;
-    padding: 30px 25px;
-  }
-
-  .card-header h2 {
-    font-size: 1.6rem;
-  }
-
-  .footer {
-    position: relative;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    padding: 25px 20px;
-  }
-
-  .card-header h2 {
-    font-size: 1.4rem;
-  }
-
-  .input-group input {
-    font-size: 1rem;
-    padding: 12px 16px;
-  }
-
-  .btn-charge {
-    font-size: 1.1rem;
-    padding: 14px;
-  }
-}
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(220, 20, 60, 0.2);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.85rem;
-  z-index: 1;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -451,23 +406,167 @@ body {
   animation: pulse 0.3s ease;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+/* Features Floating Section - Smaller and Better Positioned */
+.features-floating {
+  position: fixed;
+  top: 50%;
+  right: 3%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
 }
 
+.feature-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(220, 20, 60, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(220, 20, 60, 0.25);
+  border-radius: 10px;
+  padding: 8px 12px;
+  min-width: 75px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: fadeInRight 0.6s ease;
+  opacity: 0.85;
+}
 
-.hero-img {
+.feature-badge:hover {
+  transform: translateX(-5px);
+  background: rgba(220, 20, 60, 0.15);
+  box-shadow: 0 4px 16px rgba(220, 20, 60, 0.3);
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-@media (max-width: 1024px) {
-  .hero-img {
-    height: 65vh;
-    max-width: 50vw;
+.feature-icon {
+  font-size: 1.4rem;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
+}
+
+.feature-badge span:last-child {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 0.85;
+    transform: translateX(0);
+  }
+}
+
+/* Payment Methods Section */
+.payment-methods {
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payment-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.payment-icon {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  padding: 6px 10px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.payment-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.payment-icon img {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+}
+
+.payment-icon.paypal {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.payment-icon.binance {
+  background: linear-gradient(135deg, #f3ba2f, #e8a82e);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+}
+
+.payment-icon.vodafone {
+  background: linear-gradient(135deg, #e60000, #c20000);
+  color: white;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+}
+
+.payment-icon.instapay {
+  background: linear-gradient(135deg, #00a651, #008541);
+  color: white;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .features-floating {
+    right: 2%;
+    gap: 10px;
+  }
+
+  .feature-badge {
+    min-width: 70px;
+    padding: 7px 10px;
+  }
+
+  .card-mascot {
+    transform: translate(-60%, -90%);
+  }
+
+  .feature-icon {
+    font-size: 1.3rem;
+  }
+
+  .feature-badge span:last-child {
+    font-size: 0.65rem;
+  }
+
+  .hero-img{
+    right: 10%;
   }
 }
 
@@ -476,10 +575,117 @@ body {
     opacity: 0;
     pointer-events: none;
   }
+
+  .card {
+    margin: 5vh auto;
+    margin-bottom: 80px;
+    padding: 60px 25px 30px 25px;
+  }
+
+  .card-mascot img {
+    width: 200px;
+  }
+
+  .features-floating {
+    position: relative;
+    top: 15px;
+    right: auto;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto 15px;
+    width: 90%;
+    max-width: 340px;
+    gap: 8px;
+  }
+
+  .feature-badge {
+    min-width: auto;
+    flex: 1;
+    padding: 6px 4px;
+  }
+
+  .feature-icon {
+    font-size: 1.2rem;
+  }
+
+  .feature-badge span:last-child {
+    font-size: 0.65rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .footer {
+    position: relative;
+  }
 }
 
 @media (max-width: 480px) {
-  .hero-img {
-    display: none;
+  .card {
+    padding: 55px 20px 25px 20px;
+  }
+
+  .card-mascot {
+    transform: translate(-60%, -90%);
+    z-index: 10;
+  }
+
+  .card-mascot img {
+    width: 180px;
+  }
+
+  .card-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .feature-badge {
+    min-width: auto;
+    flex: 1;
+    padding: 4px 2px;
+    margin-bottom: 22px;
+  }
+
+    .feature-icon {
+    font-size: 1rem;
+  }
+
+  .feature-badge span:last-child {
+    font-size: 0.65rem;
+  }
+
+  .input-group input {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .btn-charge {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+
+  .payment-icons {
+    gap: 6px;
+  }
+
+  .payment-icon {
+    height: 28px;
+    padding: 5px 8px;
+  }
+
+  .payment-icon img {
+    height: 18px;
+  }
+
+  .payment-icon.binance,
+  .payment-icon.vodafone,
+  .payment-icon.instapay {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+  }
+
+  .payment-label {
+    font-size: 0.75rem;
   }
 }
