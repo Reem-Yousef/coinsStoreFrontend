@@ -171,7 +171,7 @@ export default function Calculator() {
         {/* Red Creature at Top */}
         <div className="card-mascot">
           <img 
-            src="../../../public/3fret.png" 
+            src="/3fret.png" 
             alt="TikTok Mascot" 
             onError={(e) => {
               // Fallback if image fails to load
