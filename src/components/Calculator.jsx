@@ -44,35 +44,19 @@ export default function Calculator() {
   // };
 
     const findTierByCoins = (coinsNum) => {
-    return packages.find(pkg => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins);
-  };
+        return packages.find(pkg => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins);
+      };
+    const findTierByAmount = (amountNum) => {
+      const sortedPackages = [...packages].sort(
+        (a, b) => a.pricePerK - b.pricePerK
+      );
 
-  const findTierByAmount = (amountNum) => {
-    // Sort packages by minCoins to check from smallest to largest
-    const sortedPackages = [...packages].sort((a, b) => a.minCoins - b.minCoins);
-    
-    // Try to find a tier where the amount can buy coins within that tier's range
-    for (let pkg of sortedPackages) {
-      const coinsFromAmount = (amountNum / pkg.pricePerK) * 1000;
-      
-      // Check if calculated coins fall within this tier's range
-      if (coinsFromAmount >= pkg.minCoins && coinsFromAmount <= pkg.maxCoins) {
-        return pkg;
-      }
-    }
-    
-    // If no exact match, find the tier based on price ranges
-    for (let pkg of sortedPackages) {
-      const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
-      const maxPrice = (pkg.maxCoins / 1000) * pkg.pricePerK;
-      
-      if (amountNum >= minPrice && amountNum <= maxPrice) {
-        return pkg;
-      }
-    }
-    
-    return null;
-  };
+      return sortedPackages.find(pkg => {
+        const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
+        return amountNum >= minPrice;
+      });
+    };
+
 
 
   const onCoinsChange = (value) => {
