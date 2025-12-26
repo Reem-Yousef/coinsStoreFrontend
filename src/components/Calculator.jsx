@@ -14,15 +14,15 @@ export default function Calculator() {
 
   useEffect(() => {
     Promise.all([
-      fetch(API_PACKAGES).then(r => r.json()),
-      fetch(API_CONTACTS).then(r => r.json())
+      fetch(API_PACKAGES).then((r) => r.json()),
+      fetch(API_CONTACTS).then((r) => r.json()),
     ])
       .then(([pkgData, contactData]) => {
         setPackages(pkgData.data || []);
         setContacts(contactData.data || []);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
@@ -43,21 +43,21 @@ export default function Calculator() {
   //   return null;
   // };
 
-    const findTierByCoins = (coinsNum) => {
-        return packages.find(pkg => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins);
-      };
-    const findTierByAmount = (amountNum) => {
-      const sortedPackages = [...packages].sort(
-        (a, b) => a.pricePerK - b.pricePerK
-      );
+  const findTierByCoins = (coinsNum) => {
+    return packages.find(
+      (pkg) => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins
+    );
+  };
+  const findTierByAmount = (amountNum) => {
+    const sortedPackages = [...packages].sort(
+      (a, b) => a.pricePerK - b.pricePerK
+    );
 
-      return sortedPackages.find(pkg => {
-        const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
-        return amountNum >= minPrice;
-      });
-    };
-
-
+    return sortedPackages.find((pkg) => {
+      const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
+      return amountNum >= minPrice;
+    });
+  };
 
   const onCoinsChange = (value) => {
     setCoins(value);
@@ -99,7 +99,7 @@ export default function Calculator() {
       setCoins("");
       return;
     }
-    
+
     const amountNum = parseFloat(value);
 
     if (isNaN(amountNum) || amountNum <= 0) {
@@ -154,19 +154,29 @@ export default function Calculator() {
       <div className="card">
         {/* Red Creature at Top */}
         <div className="card-mascot">
-          <img 
-            src="/3fret.png" 
-            alt="TikTok Mascot" 
+          <img
+            src="/3fret.png"
+            alt="TikTok Mascot"
             onError={(e) => {
               // Fallback if image fails to load
-              e.target.style.display = 'none';
+              e.target.style.display = "none";
             }}
           />
         </div>
 
+        {/* <h2 className="h">متجر الشيخ عفريت</h2>
         <div className="card-header">
-          <span>💰</span><h2> شحن عملات تيك توك</h2>
+          <span>💰</span><h4> شحن عملات تيك توك</h4>
           <p className="subtitle">للشحن السريع الفوري الامن بأفضل الاسعار </p>
+        </div> */}
+
+        <div className="card-header">
+          <div className="header-title-wrapper">
+            <img src="/coin1.png" alt="Coin" className="coin-icon" />
+            <h2 className="main-title">متجر الشيخ عفريت</h2>
+          </div>
+          {/* <p className="secondary-title">شحن عملات تيك توك</p> */}
+          <p className="subtitle">لشحن العملات السريع والامن </p>
         </div>
 
         <div className="input-group">
@@ -197,14 +207,10 @@ export default function Calculator() {
           />
         </div>
 
-        {warning && (
-          <div className="warning-box">
-            {warning}
-          </div>
-        )}
+        {warning && <div className="warning-box">{warning}</div>}
 
-        <button 
-          className="btn-charge" 
+        <button
+          className="btn-charge"
           onClick={() => setShowPopup(true)}
           disabled={!coins || !amount}
         >
@@ -216,7 +222,10 @@ export default function Calculator() {
           <p className="payment-label">طرق الدفع المتاحة:</p>
           <div className="payment-icons">
             <div className="payment-icon paypal">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+                alt="PayPal"
+              />
             </div>
             <div className="payment-icon binance">
               <span>Binance</span>
@@ -233,18 +242,20 @@ export default function Calculator() {
 
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup" onClick={e => e.stopPropagation()}>
+          <div className="popup" onClick={(e) => e.stopPropagation()}>
             <div className="popup-header">
               <h3>📞 تواصل معنا الآن</h3>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowPopup(false)}>
+                ×
+              </button>
             </div>
-            
+
             <div className="contact-links">
-              {contacts.map(contact => (
-                <a 
+              {contacts.map((contact) => (
+                <a
                   key={contact._id}
-                  href={contact.url} 
-                  target="_blank" 
+                  href={contact.url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="contact-btn"
                 >
