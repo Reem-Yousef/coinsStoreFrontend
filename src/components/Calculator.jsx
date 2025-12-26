@@ -28,21 +28,6 @@ export default function Calculator() {
       });
   }, []);
 
-  // const findTierByCoins = (coinsNum) => {
-  //   return packages.find(pkg => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins);
-  // };
-
-  // const findTierByAmount = (amountNum) => {
-  //   for (let pkg of packages) {
-  //     const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
-  //     const maxPrice = (pkg.maxCoins / 1000) * pkg.pricePerK;
-  //     if (amountNum >= minPrice && amountNum <= maxPrice) {
-  //       return pkg;
-  //     }
-  //   }
-  //   return null;
-  // };
-
   const findTierByCoins = (coinsNum) => {
     return packages.find(
       (pkg) => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins
@@ -163,12 +148,6 @@ export default function Calculator() {
             }}
           />
         </div>
-
-        {/* <h2 className="h">متجر الشيخ عفريت</h2>
-        <div className="card-header">
-          <span>💰</span><h4> شحن عملات تيك توك</h4>
-          <p className="subtitle">للشحن السريع الفوري الامن بأفضل الاسعار </p>
-        </div> */}
 
         <div className="card-header">
           <div className="header-title-wrapper">

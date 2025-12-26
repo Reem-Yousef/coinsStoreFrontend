@@ -74,13 +74,6 @@ body {
   transition: transform 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 25px 70px rgba(0, 0, 0, 0.6),
-    0 0 50px rgba(220, 20, 60, 0.25);
-}
-
 /* Red Creature at Top of Card */
 .card-mascot {
   position: absolute;
@@ -239,15 +232,6 @@ body {
   transition: left 0.5s;
 }
 
-.btn-charge:hover::before {
-  left: 100%;
-}
-
-.btn-charge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(220, 20, 60, 0.6);
-}
-
 .btn-charge:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -334,11 +318,6 @@ body {
   line-height: 1;
 }
 
-.close-btn:hover {
-  background: rgba(220, 20, 60, 0.3);
-  transform: rotate(90deg);
-}
-
 /* Contact Links */
 .contact-links {
   display: flex;
@@ -360,12 +339,6 @@ body {
   font-size: 1.1rem;
   font-weight: 600;
   transition: all 0.3s ease;
-}
-
-.contact-btn:hover {
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.4), rgba(139, 0, 0, 0.4));
-  transform: translateX(-5px);
-  box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3);
 }
 
 .contact-btn .icon {
@@ -490,11 +463,6 @@ body {
   justify-content: center;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.payment-icon:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .payment-icon img {
@@ -681,22 +649,33 @@ body {
   }
 }
 
-@media (hover: none) and (pointer: coarse) {
-  *:hover {
-    all: unset;
+@media (hover: hover) and (pointer: fine) {
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 25px 70px rgba(0, 0, 0, 0.6),
+      0 0 50px rgba(220, 20, 60, 0.25);
   }
 
-  .card:hover,
-  .btn-charge:hover,
-  .payment-icon:hover,
-  .contact-btn:hover,
+  .btn-charge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 20, 60, 0.6);
+  }
+
+  .btn-charge:hover::before {
+    left: 100%;
+  }
+
+  .payment-icon:hover {
+    transform: translateY(-2px);
+  }
+
+  .contact-btn:hover {
+    transform: translateX(-5px);
+  }
+
   .feature-badge:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background: initial !important;
-  }
-
-  .btn-charge::before {
-    display: none;
+    transform: translateX(-5px);
   }
 }
