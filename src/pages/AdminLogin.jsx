@@ -27,7 +27,7 @@ export default function AdminLogin({ setIsAdmin }) {
         setError("❌ Invalid admin key");
       }
     } catch (err) {
-      setError("❌ Connection error - Make sure backend is running");
+      setError("❌ Connection error - check your internet connection");
     } finally {
       setLoading(false);
     }
