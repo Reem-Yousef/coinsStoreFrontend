@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 const API_PACKAGES = "https://coins-store-backend.vercel.app/api/packages";
 const API_CONTACTS = "https://coins-store-backend.vercel.app/api/contacts";
+const API_CALCULATE =
+  "https://coins-store-backend.vercel.app/api/packages/calculate";
 
 export default function Calculator() {
   const [packages, setPackages] = useState([]);
@@ -28,87 +30,171 @@ export default function Calculator() {
       });
   }, []);
 
-  const findTierByCoins = (coinsNum) => {
-    return packages.find(
-      (pkg) => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins
-    );
-  };
-  const findTierByAmount = (amountNum) => {
-    const sortedPackages = [...packages].sort(
-      (a, b) => a.pricePerK - b.pricePerK
-    );
+  // const findTierByCoins = (coinsNum) => {
+  //   return packages.find(
+  //     (pkg) => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins
+  //   );
+  // };
+  // const findTierByAmount = (amountNum) => {
+  //   const sortedPackages = [...packages].sort(
+  //     (a, b) => a.pricePerK - b.pricePerK
+  //   );
 
-    return sortedPackages.find((pkg) => {
-      const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
-      return amountNum >= minPrice;
+  //   return sortedPackages.find((pkg) => {
+  //     const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
+  //     return amountNum >= minPrice;
+  //   });
+  // };
+
+  // const onCoinsChange = (value) => {
+  //   setCoins(value);
+  //   setWarning("");
+
+  //   if (!value || value === "") {
+  //     setAmount("");
+  //     return;
+  //   }
+
+  //   const coinsNum = parseFloat(value);
+
+  //   if (isNaN(coinsNum) || coinsNum <= 0) {
+  //     setAmount("");
+  //     return;
+  //   }
+
+  //   if (coinsNum > 100000) {
+  //     setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+  //     setAmount("");
+  //     return;
+  //   }
+
+  //   const tier = findTierByCoins(coinsNum);
+
+  //   if (tier) {
+  //     const calculatedAmount = (coinsNum / 1000) * tier.pricePerK;
+  //     setAmount(calculatedAmount.toFixed(2));
+  //   } else {
+  //     setAmount("");
+  //   }
+  // };
+
+  const onCoinsChange = async (value) => {
+  setCoins(value);
+  setWarning("");
+
+  if (!value) {
+    setAmount("");
+    return;
+  }
+
+  const coinsNum = Number(value);
+  if (isNaN(coinsNum) || coinsNum <= 0) {
+    setAmount("");
+    return;
+  }
+
+  if (coinsNum > 100000) {
+    setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+    setAmount("");
+    return;
+  }
+
+  try {
+    const res = await fetch(API_CALCULATE, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ coins: coinsNum }),
     });
-  };
 
-  const onCoinsChange = (value) => {
-    setCoins(value);
-    setWarning("");
+    const data = await res.json();
 
-    if (!value || value === "") {
-      setAmount("");
-      return;
-    }
-
-    const coinsNum = parseFloat(value);
-
-    if (isNaN(coinsNum) || coinsNum <= 0) {
-      setAmount("");
-      return;
-    }
-
-    if (coinsNum > 100000) {
-      setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
-      setAmount("");
-      return;
-    }
-
-    const tier = findTierByCoins(coinsNum);
-
-    if (tier) {
-      const calculatedAmount = (coinsNum / 1000) * tier.pricePerK;
-      setAmount(calculatedAmount.toFixed(2));
+    if (res.ok) {
+      setAmount(data.price.toFixed(2));
     } else {
       setAmount("");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setAmount("");
+  }
+};
 
-  const onAmountChange = (value) => {
-    setAmount(value);
-    setWarning("");
 
-    if (!value || value === "") {
-      setCoins("");
-      return;
-    }
+  // const onAmountChange = (value) => {
+  //   setAmount(value);
+  //   setWarning("");
 
-    const amountNum = parseFloat(value);
+  //   if (!value || value === "") {
+  //     setCoins("");
+  //     return;
+  //   }
 
-    if (isNaN(amountNum) || amountNum <= 0) {
-      setCoins("");
-      return;
-    }
+  //   const amountNum = parseFloat(value);
 
-    const tier = findTierByAmount(amountNum);
+  //   if (isNaN(amountNum) || amountNum <= 0) {
+  //     setCoins("");
+  //     return;
+  //   }
 
-    if (tier) {
-      const calculatedCoins = (amountNum / tier.pricePerK) * 1000;
-      const roundedCoins = Math.floor(calculatedCoins);
+  //   const tier = findTierByAmount(amountNum);
 
-      if (roundedCoins > 100000) {
+  //   if (tier) {
+  //     const calculatedCoins = (amountNum / tier.pricePerK) * 1000;
+  //     const roundedCoins = Math.floor(calculatedCoins);
+
+  //     if (roundedCoins > 100000) {
+  //       setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+  //       setCoins("");
+  //       return;
+  //     }
+
+  //     setCoins(roundedCoins.toString());
+  //   } else {
+  //     setCoins("");
+  //   }
+  // };
+
+
+  const onAmountChange = async (value) => {
+  setAmount(value);
+  setWarning("");
+
+  if (!value) {
+    setCoins("");
+    return;
+  }
+
+  const amountNum = Number(value);
+  if (isNaN(amountNum) || amountNum <= 0) {
+    setCoins("");
+    return;
+  }
+
+  try {
+    const res = await fetch(API_CALCULATE, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: amountNum }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      if (data.coins > 100000) {
         setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
         setCoins("");
         return;
       }
 
-      setCoins(roundedCoins.toString());
+      setCoins(data.coins.toString());
     } else {
       setCoins("");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setCoins("");
+  }
+};
 
   if (loading) {
     return (
