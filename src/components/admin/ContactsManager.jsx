@@ -86,7 +86,7 @@ export default function ContactsManager() {
   return (
     <div className="manager-section">
       <div className="section-header">
-        <h2>Contact Links Management</h2>
+        <h2>📞 Contact Links Management</h2>
         <button onClick={() => setShowAdd(!showAdd)} className="btn-primary">
           {showAdd ? 'Cancel' : '+ Add Contact'}
         </button>
@@ -94,37 +94,50 @@ export default function ContactsManager() {
 
       {showAdd && (
         <form onSubmit={handleSubmit} className="admin-form">
-          <select
-            value={formData.type}
-            onChange={(e) =>
-              setFormData({ ...formData, type: e.target.value })
-            }
-          >
-            <option value="whatsapp">WhatsApp</option>
-            <option value="telegram">Telegram</option>
-            <option value="facebook">Facebook</option>
-            <option value="instagram">Instagram</option>
-            <option value="other">Other</option>
-          </select>
+          <div className="form-row">
+            <select
+              value={formData.type}
+              onChange={(e) =>
+                setFormData({ ...formData, type: e.target.value })
+              }
+            >
+              <option value="whatsapp">WhatsApp</option>
+              <option value="telegram">Telegram</option>
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+              <option value="other">Other</option>
+            </select>
+
+            <input
+              type="number"
+              placeholder="Order"
+              value={formData.order}
+              onChange={(e) =>
+                setFormData({ ...formData, order: e.target.value })
+              }
+            />
+          </div>
 
           <input
-            placeholder="Label"
+            placeholder="Label (e.g. WhatsApp Business)"
             value={formData.label}
             onChange={(e) =>
               setFormData({ ...formData, label: e.target.value })
             }
+            required
           />
 
           <input
-            placeholder="URL"
+            placeholder="URL (e.g. https://wa.me/201234567890)"
             value={formData.url}
             onChange={(e) =>
               setFormData({ ...formData, url: e.target.value })
             }
+            required
           />
 
           <input
-            placeholder="Icon"
+            placeholder="Icon Emoji (e.g. 📱 or 💬)"
             value={formData.icon}
             onChange={(e) =>
               setFormData({ ...formData, icon: e.target.value })
@@ -139,24 +152,48 @@ export default function ContactsManager() {
                 setFormData({ ...formData, isActive: e.target.checked })
               }
             />
-            Active
+            Active Contact
           </label>
 
-          <button className="btn-success">
-            {editingId ? 'Update' : 'Create'}
+          <button type="submit" className="btn-success">
+            {editingId ? 'Update Contact' : 'Create Contact'}
           </button>
         </form>
       )}
 
       <div className="items-list">
-        {contacts.map((c) => (
-          <div key={c._id} className="item-card">
-            <h3>{c.icon} {c.label}</h3>
-            <p>{c.url}</p>
-            <button onClick={() => handleEdit(c)}>Edit</button>
-            <button onClick={() => handleDelete(c._id)}>Delete</button>
-          </div>
-        ))}
+        {contacts.length === 0 ? (
+          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', padding: '20px' }}>
+            No contact links yet. Add your first contact!
+          </p>
+        ) : (
+          contacts.map((contact) => (
+            <div key={contact._id} className={`item-card ${!contact.isActive ? 'inactive' : ''}`}>
+              <div className="item-info">
+                <h3>
+                  {contact.icon} {contact.label}
+                </h3>
+                <p className="url-preview">
+                  <strong>Type:</strong> {contact.type}
+                </p>
+                <p className="url-preview">
+                  {contact.url}
+                </p>
+                <span className={`badge ${contact.isActive ? 'active' : 'inactive'}`}>
+                  {contact.isActive ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+              <div className="item-actions">
+                <button onClick={() => handleEdit(contact)} className="btn-edit">
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(contact._id)} className="btn-delete">
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ const API_BASE = 'https://coins-store-backend.vercel.app/api';
 
 let accessToken = localStorage.getItem('accessToken');
 
-// 🔁 Refresh Access Token
+// ✅ دالة لتجديد الـ Access Token
 const refreshAccessToken = async () => {
   try {
     const res = await fetch(`${API_BASE}/auth/refresh`, {
@@ -23,7 +23,7 @@ const refreshAccessToken = async () => {
   }
 };
 
-// 🌐 Unified API Call
+// ✅ دالة API موحدة مع Auto-refresh
 export const apiCall = async (url, options = {}) => {
   const headers = {
     'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export const apiCall = async (url, options = {}) => {
   };
 
   if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
+    headers['Authorization'] = `Bearer ${accessToken}`;
   }
 
   let res = await fetch(`${API_BASE}${url}`, {
@@ -40,16 +40,13 @@ export const apiCall = async (url, options = {}) => {
     credentials: 'include'
   });
 
+  // لو الـ Token منتهي، جدده وحاول تاني
   if (res.status === 401) {
-    let data = {};
-    try {
-      data = await res.json();
-    } catch {}
-
+    const data = await res.json();
     if (data.code === 'TOKEN_EXPIRED') {
       await refreshAccessToken();
-
-      headers.Authorization = `Bearer ${accessToken}`;
+      
+      headers['Authorization'] = `Bearer ${accessToken}`;
       res = await fetch(`${API_BASE}${url}`, {
         ...options,
         headers,

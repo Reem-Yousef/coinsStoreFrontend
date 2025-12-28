@@ -87,66 +87,126 @@ export default function PackagesManager() {
 
   return (
     <div className="manager-section">
-      <h2>Packages Management</h2>
-
-      <button onClick={() => setShowAdd(!showAdd)}>
-        {showAdd ? 'Cancel' : '+ Add Package'}
-      </button>
+      <div className="section-header">
+        <h2>📦 Packages Management</h2>
+        <button onClick={() => setShowAdd(!showAdd)} className="btn-primary">
+          {showAdd ? 'Cancel' : '+ Add Package'}
+        </button>
+      </div>
 
       {showAdd && (
-        <form onSubmit={handleSubmit}>
-          <input
-            placeholder="Min Coins"
-            value={formData.minCoins}
-            onChange={(e) =>
-              setFormData({ ...formData, minCoins: e.target.value })
-            }
-          />
+        <form onSubmit={handleSubmit} className="admin-form">
+          <div className="form-row">
+            <input
+              type="number"
+              placeholder="Min Coins"
+              value={formData.minCoins}
+              onChange={(e) =>
+                setFormData({ ...formData, minCoins: e.target.value })
+              }
+              required
+            />
+
+            <input
+              type="number"
+              placeholder="Max Coins"
+              value={formData.maxCoins}
+              onChange={(e) =>
+                setFormData({ ...formData, maxCoins: e.target.value })
+              }
+              required
+            />
+          </div>
+
+          <div className="form-row">
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Price per 1000 coins"
+              value={formData.pricePerK}
+              onChange={(e) =>
+                setFormData({ ...formData, pricePerK: e.target.value })
+              }
+              required
+            />
+
+            <input
+              type="number"
+              placeholder="Order"
+              value={formData.order}
+              onChange={(e) =>
+                setFormData({ ...formData, order: e.target.value })
+              }
+            />
+          </div>
 
           <input
-            placeholder="Max Coins"
-            value={formData.maxCoins}
-            onChange={(e) =>
-              setFormData({ ...formData, maxCoins: e.target.value })
-            }
-          />
-
-          <input
-            placeholder="Price per 1000"
-            value={formData.pricePerK}
-            onChange={(e) =>
-              setFormData({ ...formData, pricePerK: e.target.value })
-            }
-          />
-
-          <input
-            placeholder="Title"
+            placeholder="Package Title"
             value={formData.title}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
+            required
           />
 
           <textarea
-            placeholder="Description"
+            placeholder="Description (optional)"
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
           />
 
-          <button>{editingId ? 'Update' : 'Create'}</button>
+          <label>
+            <input
+              type="checkbox"
+              checked={formData.isActive}
+              onChange={(e) =>
+                setFormData({ ...formData, isActive: e.target.checked })
+              }
+            />
+            Active Package
+          </label>
+
+          <button type="submit" className="btn-success">
+            {editingId ? 'Update Package' : 'Create Package'}
+          </button>
         </form>
       )}
 
-      {packages.map((p) => (
-        <div key={p._id}>
-          <h3>{p.title}</h3>
-          <p>{p.minCoins} → {p.maxCoins}</p>
-          <button onClick={() => handleEdit(p)}>Edit</button>
-          <button onClick={() => handleDelete(p._id)}>Delete</button>
-        </div>
-      ))}
+      <div className="items-list">
+        {packages.length === 0 ? (
+          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', padding: '20px' }}>
+            No packages yet. Add your first package!
+          </p>
+        ) : (
+          packages.map((pkg) => (
+            <div key={pkg._id} className={`item-card ${!pkg.isActive ? 'inactive' : ''}`}>
+              <div className="item-info">
+                <h3>{pkg.title}</h3>
+                <p>
+                  <strong>Range:</strong> {pkg.minCoins.toLocaleString()} → {pkg.maxCoins.toLocaleString()} coins
+                </p>
+                <p>
+                  <strong>Price:</strong> {pkg.pricePerK} EGP per 1000 coins
+                </p>
+                {pkg.description && <p>{pkg.description}</p>}
+                <span className={`badge ${pkg.isActive ? 'active' : 'inactive'}`}>
+                  {pkg.isActive ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+              <div className="item-actions">
+                <button onClick={() => handleEdit(pkg)} className="btn-edit">
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(pkg._id)} className="btn-delete">
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
