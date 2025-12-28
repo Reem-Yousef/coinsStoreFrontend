@@ -11,8 +11,9 @@ export default function Calculator() {
   const [showPopup, setShowPopup] = useState(false);
   const [warning, setWarning] = useState("");
   const [loading, setLoading] = useState(true);
+  const [calculating, setCalculating] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
     fetch(API_CONTACTS)
       .then((r) => r.json())
       .then((contactData) => {
@@ -25,88 +26,129 @@ export default function Calculator() {
       });
   }, []);
 
+  // Debouncing للحساب من الكوينات
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (coins && coins !== "0") {
+        calculateFromCoins(coins);
+      }
+    }, 500);
 
-  const onCoinsChange = async (value) => {
-  setCoins(value);
-  setWarning("");
+    return () => clearTimeout(timer);
+  }, [coins]);
 
-  if (!value) {
-    setAmount("");
-    return;
-  }
+  // Debouncing للحساب من المبلغ
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (amount && amount !== "0") {
+        calculateFromAmount(amount);
+      }
+    }, 500);
 
-  const coinsNum = Number(value);
-  if (isNaN(coinsNum) || coinsNum <= 0) {
-    setAmount("");
-    return;
-  }
+    return () => clearTimeout(timer);
+  }, [amount]);
 
-  if (coinsNum > 100000) {
-    setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
-    setAmount("");
-    return;
-  }
-
-  try {
-    const res = await fetch(API_CALCULATE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ coins: coinsNum }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setAmount(data.price.toFixed(2));
-    } else {
+  const calculateFromCoins = async (value) => {
+    const coinsNum = Number(value);
+    
+    if (isNaN(coinsNum) || coinsNum <= 0) {
       setAmount("");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    setAmount("");
-  }
-};
 
-  const onAmountChange = async (value) => {
-  setAmount(value);
-  setWarning("");
+    if (coinsNum > 100000) {
+      setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+      setAmount("");
+      return;
+    }
 
-  if (!value) {
-    setCoins("");
-    return;
-  }
+    setCalculating(true);
+    try {
+      const res = await fetch(API_CALCULATE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ coins: coinsNum }),
+      });
 
-  const amountNum = Number(value);
-  if (isNaN(amountNum) || amountNum <= 0) {
-    setCoins("");
-    return;
-  }
+      if (!res.ok) {
+        setAmount("");
+        return;
+      }
 
-  try {
-    const res = await fetch(API_CALCULATE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: amountNum }),
-    });
+      const data = await res.json();
+      
+      if (data.success && data.price) {
+        setAmount(data.price.toFixed(2));
+      } else {
+        setAmount("");
+      }
+    } catch (err) {
+      console.error(err);
+      setAmount("");
+    } finally {
+      setCalculating(false);
+    }
+  };
 
-    const data = await res.json();
+  const calculateFromAmount = async (value) => {
+    const amountNum = Number(value);
+    
+    if (isNaN(amountNum) || amountNum <= 0) {
+      setCoins("");
+      return;
+    }
 
-    if (res.ok) {
-      if (data.coins > 100000) {
-        setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+    setCalculating(true);
+    try {
+      const res = await fetch(API_CALCULATE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: amountNum }),
+      });
+
+      if (!res.ok) {
         setCoins("");
         return;
       }
 
-      setCoins(data.coins.toString());
-    } else {
+      const data = await res.json();
+
+      if (data.success && data.coins) {
+        if (data.coins > 100000) {
+          setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
+          setCoins("");
+          return;
+        }
+
+        setCoins(data.coins.toString());
+      } else {
+        setCoins("");
+      }
+    } catch (err) {
+      console.error(err);
+      setCoins("");
+    } finally {
+      setCalculating(false);
+    }
+  };
+
+  const onCoinsChange = (value) => {
+    setCoins(value);
+    setWarning("");
+    
+    if (!value || value === "" || value === "0") {
+      setAmount("");
+    }
+  };
+
+  const onAmountChange = (value) => {
+    setAmount(value);
+    setWarning("");
+
+    if (!value || value === "" || value === "0") {
       setCoins("");
     }
-  } catch (err) {
-    console.error(err);
-    setCoins("");
-  }
-};
+  };
 
   if (loading) {
     return (
@@ -118,7 +160,7 @@ export default function Calculator() {
 
   return (
     <>
-      {/* Features Section - Outside Card (Smaller & Better Positioned) */}
+      {/* Features Section */}
       <div className="features-floating">
         <div className="feature-badge">
           <span className="feature-icon">⚡</span>
@@ -141,7 +183,6 @@ export default function Calculator() {
             src="/3fret.png"
             alt="TikTok Mascot"
             onError={(e) => {
-              // Fallback if image fails to load
               e.target.style.display = "none";
             }}
           />
@@ -152,8 +193,7 @@ export default function Calculator() {
             <img src="/coin1.png" alt="Coin" className="coin-icon" />
             <h2 className="main-title">متجر الشيخ عفريت</h2>
           </div>
-          {/* <p className="secondary-title">شحن عملات تيك توك</p> */}
-          <p className="subtitle">لشحن العملات السريع والامن </p>
+          <p className="subtitle">لشحن العملات السريع والامن</p>
         </div>
 
         <div className="input-group">
@@ -189,9 +229,9 @@ export default function Calculator() {
         <button
           className="btn-charge"
           onClick={() => setShowPopup(true)}
-          disabled={!coins || !amount}
+          disabled={!coins || !amount || calculating}
         >
-          اشحن الآن
+          {calculating ? "جاري الحساب..." : "اشحن الآن"}
         </button>
 
         {/* Payment Methods Section */}
