@@ -22,7 +22,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (keySequence === "admin") {
+    if (keySequence === "remoz") {
       navigate("/admin/login");
       setKeySequence("");
     }
