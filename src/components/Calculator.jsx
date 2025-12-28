@@ -205,6 +205,7 @@ export default function Calculator() {
             placeholder="أدخل عدد الكوينات"
             value={coins}
             onChange={(e) => onCoinsChange(e.target.value)}
+            onInput={(e) => onCoinsChange(e.target.value)}
             min="0"
             step="1"
           />
@@ -221,6 +222,7 @@ export default function Calculator() {
             placeholder="أدخل المبلغ"
             value={amount}
             onChange={(e) => onAmountChange(e.target.value)}
+            onInput={(e) => onAmountChange(e.target.value)}
             min="0"
             step="0.01"
           />
