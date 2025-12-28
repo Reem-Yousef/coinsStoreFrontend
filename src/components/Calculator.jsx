@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const API_CONTACTS = "https://coins-store-backend.vercel.app/api/contacts";
-const API_CALCULATE =
-  "https://coins-store-backend.vercel.app/api/packages/calculate";
+const API_CALCULATE = "https://coins-store-backend.vercel.app/api/packages/calculate";
 
 export default function Calculator() {
   const [contacts, setContacts] = useState([]);
@@ -12,6 +11,9 @@ export default function Calculator() {
   const [warning, setWarning] = useState("");
   const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
+  
+  const coinsTimerRef = useRef(null);
+  const amountTimerRef = useRef(null);
 
   useEffect(() => {
     fetch(API_CONTACTS)
@@ -25,28 +27,6 @@ export default function Calculator() {
         setLoading(false);
       });
   }, []);
-
-  // Debouncing للحساب من الكوينات
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (coins && coins !== "0") {
-        calculateFromCoins(coins);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [coins]);
-
-  // Debouncing للحساب من المبلغ
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (amount && amount !== "0") {
-        calculateFromAmount(amount);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [amount]);
 
   const calculateFromCoins = async (value) => {
     const coinsNum = Number(value);
@@ -136,18 +116,42 @@ export default function Calculator() {
     setCoins(value);
     setWarning("");
     
+    // امسح أي timer قديم
+    if (coinsTimerRef.current) {
+      clearTimeout(coinsTimerRef.current);
+    }
+    
+    // لو فاضي، امسح المبلغ
     if (!value || value === "" || value === "0") {
       setAmount("");
+      return;
     }
+    
+    // استنى نص ثانية قبل ما تحسب
+    coinsTimerRef.current = setTimeout(() => {
+      calculateFromCoins(value);
+    }, 500);
   };
 
   const onAmountChange = (value) => {
     setAmount(value);
     setWarning("");
+    
+    // امسح أي timer قديم
+    if (amountTimerRef.current) {
+      clearTimeout(amountTimerRef.current);
+    }
 
+    // لو فاضي، امسح الكوينات
     if (!value || value === "" || value === "0") {
       setCoins("");
+      return;
     }
+    
+    // استنى نص ثانية قبل ما تحسب
+    amountTimerRef.current = setTimeout(() => {
+      calculateFromAmount(value);
+    }, 500);
   };
 
   if (loading) {
@@ -160,7 +164,6 @@ export default function Calculator() {
 
   return (
     <>
-      {/* Features Section */}
       <div className="features-floating">
         <div className="feature-badge">
           <span className="feature-icon">⚡</span>
@@ -177,7 +180,6 @@ export default function Calculator() {
       </div>
 
       <div className="card">
-        {/* Red Creature at Top */}
         <div className="card-mascot">
           <img
             src="/3fret.png"
@@ -234,7 +236,6 @@ export default function Calculator() {
           {calculating ? "جاري الحساب..." : "اشحن الآن"}
         </button>
 
-        {/* Payment Methods Section */}
         <div className="payment-methods">
           <p className="payment-label">طرق الدفع المتاحة:</p>
           <div className="payment-icons">
