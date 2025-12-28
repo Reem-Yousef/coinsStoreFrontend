@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 
-const API_PACKAGES = "https://coins-store-backend.vercel.app/api/packages";
 const API_CONTACTS = "https://coins-store-backend.vercel.app/api/contacts";
 const API_CALCULATE =
   "https://coins-store-backend.vercel.app/api/packages/calculate";
 
 export default function Calculator() {
-  const [packages, setPackages] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [coins, setCoins] = useState("");
   const [amount, setAmount] = useState("");
@@ -14,13 +12,10 @@ export default function Calculator() {
   const [warning, setWarning] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    Promise.all([
-      fetch(API_PACKAGES).then((r) => r.json()),
-      fetch(API_CONTACTS).then((r) => r.json()),
-    ])
-      .then(([pkgData, contactData]) => {
-        setPackages(pkgData.data || []);
+    useEffect(() => {
+    fetch(API_CONTACTS)
+      .then((r) => r.json())
+      .then((contactData) => {
         setContacts(contactData.data || []);
         setLoading(false);
       })
@@ -30,53 +25,6 @@ export default function Calculator() {
       });
   }, []);
 
-  // const findTierByCoins = (coinsNum) => {
-  //   return packages.find(
-  //     (pkg) => coinsNum >= pkg.minCoins && coinsNum <= pkg.maxCoins
-  //   );
-  // };
-  // const findTierByAmount = (amountNum) => {
-  //   const sortedPackages = [...packages].sort(
-  //     (a, b) => a.pricePerK - b.pricePerK
-  //   );
-
-  //   return sortedPackages.find((pkg) => {
-  //     const minPrice = (pkg.minCoins / 1000) * pkg.pricePerK;
-  //     return amountNum >= minPrice;
-  //   });
-  // };
-
-  // const onCoinsChange = (value) => {
-  //   setCoins(value);
-  //   setWarning("");
-
-  //   if (!value || value === "") {
-  //     setAmount("");
-  //     return;
-  //   }
-
-  //   const coinsNum = parseFloat(value);
-
-  //   if (isNaN(coinsNum) || coinsNum <= 0) {
-  //     setAmount("");
-  //     return;
-  //   }
-
-  //   if (coinsNum > 100000) {
-  //     setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
-  //     setAmount("");
-  //     return;
-  //   }
-
-  //   const tier = findTierByCoins(coinsNum);
-
-  //   if (tier) {
-  //     const calculatedAmount = (coinsNum / 1000) * tier.pricePerK;
-  //     setAmount(calculatedAmount.toFixed(2));
-  //   } else {
-  //     setAmount("");
-  //   }
-  // };
 
   const onCoinsChange = async (value) => {
   setCoins(value);
@@ -118,42 +66,6 @@ export default function Calculator() {
     setAmount("");
   }
 };
-
-
-  // const onAmountChange = (value) => {
-  //   setAmount(value);
-  //   setWarning("");
-
-  //   if (!value || value === "") {
-  //     setCoins("");
-  //     return;
-  //   }
-
-  //   const amountNum = parseFloat(value);
-
-  //   if (isNaN(amountNum) || amountNum <= 0) {
-  //     setCoins("");
-  //     return;
-  //   }
-
-  //   const tier = findTierByAmount(amountNum);
-
-  //   if (tier) {
-  //     const calculatedCoins = (amountNum / tier.pricePerK) * 1000;
-  //     const roundedCoins = Math.floor(calculatedCoins);
-
-  //     if (roundedCoins > 100000) {
-  //       setWarning("⚠️ للطلبات أكثر من 100,000 كوين، يرجى التواصل معنا مباشرة");
-  //       setCoins("");
-  //       return;
-  //     }
-
-  //     setCoins(roundedCoins.toString());
-  //   } else {
-  //     setCoins("");
-  //   }
-  // };
-
 
   const onAmountChange = async (value) => {
   setAmount(value);
