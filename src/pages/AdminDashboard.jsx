@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearAccessToken } from "../utils/api";
 import PackagesManager from "../components/admin/PackagesManager";
 import ContactsManager from "../components/admin/ContactsManager";
 import "../styles/admin.css";
@@ -8,8 +9,19 @@ export default function AdminDashboard({ setIsAdmin }) {
   const [activeTab, setActiveTab] = useState("packages");
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminKey");
+  const handleLogout = async () => {
+    try {
+      // ✅ اطلب logout من السيرفر
+      await fetch("https://coins-store-backend.vercel.app/api/auth/logout", {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+
+    // ✅ امسح الـ Token المحلي
+    clearAccessToken();
     setIsAdmin(false);
     navigate("/admin/login");
   };

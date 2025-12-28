@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
-
-const API = "https://coins-store-backend.vercel.app/api/contacts";
-const getAdminKey = () => localStorage.getItem("adminKey");
+import { useEffect, useState } from 'react';
+import { apiCall } from '../../utils/api';
 
 export default function ContactsManager() {
   const [contacts, setContacts] = useState([]);
@@ -9,10 +7,10 @@ export default function ContactsManager() {
   const [showAdd, setShowAdd] = useState(false);
 
   const [formData, setFormData] = useState({
-    type: "whatsapp",
-    label: "",
-    url: "",
-    icon: "",
+    type: 'whatsapp',
+    label: '',
+    url: '',
+    icon: '',
     isActive: true,
     order: 0
   });
@@ -23,9 +21,7 @@ export default function ContactsManager() {
 
   const fetchContacts = async () => {
     try {
-      const res = await fetch(`${API}/admin/all`, {
-        headers: { "x-admin-key": getAdminKey() }
-      });
+      const res = await apiCall('/contacts/admin/all');
       const data = await res.json();
       setContacts(data.data || []);
     } catch (err) {
@@ -37,15 +33,14 @@ export default function ContactsManager() {
     e.preventDefault();
 
     try {
-      const url = editingId ? `${API}/${editingId}` : API;
-      const method = editingId ? "PUT" : "POST";
+      const url = editingId
+        ? `/contacts/${editingId}`
+        : '/contacts';
 
-      const res = await fetch(url, {
+      const method = editingId ? 'PUT' : 'POST';
+
+      const res = await apiCall(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-key": getAdminKey()
-        },
         body: JSON.stringify(formData)
       });
 
@@ -65,13 +60,10 @@ export default function ContactsManager() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this contact link?")) return;
+    if (!confirm('Delete this contact link?')) return;
 
     try {
-      await fetch(`${API}/${id}`, {
-        method: "DELETE",
-        headers: { "x-admin-key": getAdminKey() }
-      });
+      await apiCall(`/contacts/${id}`, { method: 'DELETE' });
       fetchContacts();
     } catch (err) {
       console.error(err);
@@ -80,10 +72,10 @@ export default function ContactsManager() {
 
   const resetForm = () => {
     setFormData({
-      type: "whatsapp",
-      label: "",
-      url: "",
-      icon: "",
+      type: 'whatsapp',
+      label: '',
+      url: '',
+      icon: '',
       isActive: true,
       order: 0
     });
@@ -96,7 +88,7 @@ export default function ContactsManager() {
       <div className="section-header">
         <h2>Contact Links Management</h2>
         <button onClick={() => setShowAdd(!showAdd)} className="btn-primary">
-          {showAdd ? "Cancel" : "+ Add Contact"}
+          {showAdd ? 'Cancel' : '+ Add Contact'}
         </button>
       </div>
 
@@ -104,8 +96,9 @@ export default function ContactsManager() {
         <form onSubmit={handleSubmit} className="admin-form">
           <select
             value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-            required
+            onChange={(e) =>
+              setFormData({ ...formData, type: e.target.value })
+            }
           >
             <option value="whatsapp">WhatsApp</option>
             <option value="telegram">Telegram</option>
@@ -115,66 +108,53 @@ export default function ContactsManager() {
           </select>
 
           <input
-            type="text"
-            placeholder="Label (e.g., واتساب الدعم)"
+            placeholder="Label"
             value={formData.label}
-            onChange={(e) => setFormData({ ...formData, label: e.target.value })}
-            required
+            onChange={(e) =>
+              setFormData({ ...formData, label: e.target.value })
+            }
           />
 
           <input
-            type="url"
-            placeholder="URL (e.g., https://wa.me/...)"
+            placeholder="URL"
             value={formData.url}
-            onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-            required
+            onChange={(e) =>
+              setFormData({ ...formData, url: e.target.value })
+            }
           />
 
           <input
-            type="text"
-            placeholder="Icon (emoji or text)"
+            placeholder="Icon"
             value={formData.icon}
-            onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, icon: e.target.value })
+            }
           />
 
-          <div className="form-row">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.isActive}
-                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              />
-              Active
-            </label>
+          <label>
             <input
-              type="number"
-              placeholder="Order"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: e.target.value })}
+              type="checkbox"
+              checked={formData.isActive}
+              onChange={(e) =>
+                setFormData({ ...formData, isActive: e.target.checked })
+              }
             />
-          </div>
+            Active
+          </label>
 
-          <button type="submit" className="btn-success">
-            {editingId ? "Update" : "Create"} Contact
+          <button className="btn-success">
+            {editingId ? 'Update' : 'Create'}
           </button>
         </form>
       )}
 
       <div className="items-list">
-        {contacts.map(contact => (
-          <div key={contact._id} className={`item-card ${!contact.isActive ? 'inactive' : ''}`}>
-            <div className="item-info">
-              <h3>{contact.icon} {contact.label}</h3>
-              <p>Type: {contact.type}</p>
-              <p className="url-preview">{contact.url}</p>
-              <span className={`badge ${contact.isActive ? 'active' : 'inactive'}`}>
-                {contact.isActive ? 'Active' : 'Inactive'}
-              </span>
-            </div>
-            <div className="item-actions">
-              <button onClick={() => handleEdit(contact)} className="btn-edit">Edit</button>
-              <button onClick={() => handleDelete(contact._id)} className="btn-delete">Delete</button>
-            </div>
+        {contacts.map((c) => (
+          <div key={c._id} className="item-card">
+            <h3>{c.icon} {c.label}</h3>
+            <p>{c.url}</p>
+            <button onClick={() => handleEdit(c)}>Edit</button>
+            <button onClick={() => handleDelete(c._id)}>Delete</button>
           </div>
         ))}
       </div>
