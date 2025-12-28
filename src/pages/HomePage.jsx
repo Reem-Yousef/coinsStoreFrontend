@@ -29,16 +29,16 @@ export default function HomePage() {
   }, [keySequence, navigate]);
 
   // Mobile: Tap footer 5 times quickly
-  const handleFooterTap = () => {
-    setTapCount(prev => prev + 1);
+  // const handleFooterTap = () => {
+  //   setTapCount(prev => prev + 1);
     
-    setTimeout(() => setTapCount(0), 2000); // Reset after 2 seconds
+  //   setTimeout(() => setTapCount(0), 2000); // Reset after 2 seconds
     
-    if (tapCount + 1 >= 5) {
-      navigate("/admin/login");
-      setTapCount(0);
-    }
-  };
+  //   if (tapCount + 1 >= 5) {
+  //     navigate("/admin/login");
+  //     setTapCount(0);
+  //   }
+  // };
 
   return (
     <div className="page">
