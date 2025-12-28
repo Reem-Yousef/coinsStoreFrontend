@@ -46,11 +46,12 @@ export default function HomePage() {
       <img src={demon} className="hero-img" alt="TikTok" />
       <Calculator />
       
-      <footer className="footer" onClick={handleFooterTap}>
+      {/* <footer className="footer" onClick={handleFooterTap}> */}
+      <footer className="footer">
         <p>© 2025 TikTok Coins Calculator - All Rights Reserved</p>
-        {tapCount > 0 && tapCount < 5 && (
+        {/* {tapCount > 0 && tapCount < 5 && (
           <span className="tap-indicator">{tapCount}/5</span>
-        )}
+        )} */}
       </footer>
     </div>
   );
