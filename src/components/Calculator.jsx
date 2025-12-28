@@ -14,6 +14,10 @@ export default function Calculator() {
   
   const coinsTimerRef = useRef(null);
   const amountTimerRef = useRef(null);
+  
+  // ✅ Cache للأسعار المحسوبة (عشان يبقى سريع)
+  const coinsCacheRef = useRef({});
+  const amountCacheRef = useRef({});
 
   useEffect(() => {
     fetch(API_CONTACTS)
@@ -42,6 +46,12 @@ export default function Calculator() {
       return;
     }
 
+    // ✅ تحقق من الـ Cache أولاً
+    if (coinsCacheRef.current[coinsNum]) {
+      setAmount(coinsCacheRef.current[coinsNum]);
+      return;
+    }
+
     setCalculating(true);
     try {
       const res = await fetch(API_CALCULATE, {
@@ -58,7 +68,10 @@ export default function Calculator() {
       const data = await res.json();
       
       if (data.success && data.price) {
-        setAmount(data.price.toFixed(2));
+        const priceStr = data.price.toFixed(2);
+        // ✅ احفظ في الـ Cache
+        coinsCacheRef.current[coinsNum] = priceStr;
+        setAmount(priceStr);
       } else {
         setAmount("");
       }
@@ -75,6 +88,12 @@ export default function Calculator() {
     
     if (isNaN(amountNum) || amountNum <= 0) {
       setCoins("");
+      return;
+    }
+
+    // ✅ تحقق من الـ Cache أولاً
+    if (amountCacheRef.current[amountNum]) {
+      setCoins(amountCacheRef.current[amountNum]);
       return;
     }
 
@@ -100,7 +119,10 @@ export default function Calculator() {
           return;
         }
 
-        setCoins(data.coins.toString());
+        const coinsStr = data.coins.toString();
+        // ✅ احفظ في الـ Cache
+        amountCacheRef.current[amountNum] = coinsStr;
+        setCoins(coinsStr);
       } else {
         setCoins("");
       }
@@ -116,42 +138,38 @@ export default function Calculator() {
     setCoins(value);
     setWarning("");
     
-    // امسح أي timer قديم
     if (coinsTimerRef.current) {
       clearTimeout(coinsTimerRef.current);
     }
     
-    // لو فاضي، امسح المبلغ
     if (!value || value === "" || value === "0") {
       setAmount("");
       return;
     }
     
-    // استنى نص ثانية قبل ما تحسب
+    // ✅ تقليل الوقت من 500ms لـ 300ms (أسرع)
     coinsTimerRef.current = setTimeout(() => {
       calculateFromCoins(value);
-    }, 500);
+    }, 300);
   };
 
   const onAmountChange = (value) => {
     setAmount(value);
     setWarning("");
     
-    // امسح أي timer قديم
     if (amountTimerRef.current) {
       clearTimeout(amountTimerRef.current);
     }
 
-    // لو فاضي، امسح الكوينات
     if (!value || value === "" || value === "0") {
       setCoins("");
       return;
     }
     
-    // استنى نص ثانية قبل ما تحسب
+    // ✅ تقليل الوقت من 500ms لـ 300ms (أسرع)
     amountTimerRef.current = setTimeout(() => {
       calculateFromAmount(value);
-    }, 500);
+    }, 300);
   };
 
   if (loading) {
