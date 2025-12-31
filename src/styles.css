@@ -16,24 +16,30 @@ body {
 .page {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0000 0%, #1a0000 25%, #2d0000 50%, #1a0000 75%, #0a0000 100%);
+  background: linear-gradient(135deg, #0a0000 0%, #2d0000 100%); /* ✅ مبسّط */
   overflow: hidden;
 }
 
+/* ✅ Gradient مبسّط - بدل 3 gradients */
 .gradient-bg {
   position: fixed;
   inset: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(178, 34, 34, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
   pointer-events: none;
-  animation: gradientShift 15s ease-in-out infinite;
+  opacity: 0.8;
+  /* ✅ Animation أخف */
+  animation: gradientShift 20s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+}
+
+/* ✅ FadeIn للصورة */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .hero-img {
@@ -43,15 +49,18 @@ body {
   height: 65vh;
   max-width: 35vw;
   object-fit: contain;
-  filter: drop-shadow(0 0 60px rgba(177, 0, 0, 0.5));
+  filter: drop-shadow(0 0 40px rgba(177, 0, 0, 0.4)); /* ✅ shadow أخف */
   pointer-events: none;
   z-index: 1;
-  animation: float 4s ease-in-out infinite;
+  /* ✅ Animation أخف */
+  animation: float 6s ease-in-out infinite;
+  /* ✅ استخدام will-change للتحسين */
+  will-change: transform;
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-15px); }
 }
 
 /* Calculator Card */
@@ -63,7 +72,7 @@ body {
   background: rgba(10, 0, 0, 0.85);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(220, 20, 60, 0.3);
-  padding: 25px 25px ;
+  padding: 25px;
   width: min(430px, 90vw);
   border-radius: 24px;
   box-shadow: 
@@ -72,6 +81,8 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 2;
   transition: transform 0.3s ease;
+  /* ✅ استخدام will-change */
+  will-change: transform;
 }
 
 /* Red Creature at Top of Card */
@@ -87,11 +98,8 @@ body {
 .card-mascot img {
   width: clamp(90px, 20vw, 250px);
   height: auto;
-}
-
-@keyframes mascotFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  /* ✅ تحسين الصور */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .card-header {
@@ -109,6 +117,8 @@ body {
   width: 23px;
   height: 23px;
   object-fit: contain;
+  /* ✅ تحسين الصور الصغيرة */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .main-title {
@@ -118,6 +128,7 @@ body {
   background: linear-gradient(135deg, #ff4444, #cc0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
@@ -167,7 +178,6 @@ body {
   align-items: center;
   justify-content: center;
   margin: 5px 0;
-  margin-top: 5px;
 }
 
 .divider span {
@@ -176,7 +186,8 @@ body {
   background: rgba(245, 24, 68, 0.1);
   padding: 5px 16px;
   border-radius: 50%;
-  animation: rotate 3s linear infinite;
+  /* ✅ Animation أبطأ */
+  animation: rotate 4s linear infinite;
 }
 
 @keyframes rotate {
@@ -216,7 +227,6 @@ body {
   cursor: pointer;
   margin-top: 10px;
   transition: all 0.3s ease;
-  /* box-shadow: 0 8px 20px rgba(220, 20, 60, 0.4); */
   position: relative;
   overflow: hidden;
 }
@@ -263,11 +273,6 @@ body {
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .popup {
@@ -364,19 +369,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.tap-indicator {
-  display: inline-block;
-  margin-left: 10px;
-  padding: 4px 10px;
-  background: rgba(220, 20, 60, 0.2);
-  border-radius: 12px;
-  color: rgba(220, 20, 60, 0.8);
-  font-size: 0.75rem;
-  font-weight: 600;
-  animation: pulse 0.3s ease;
-}
-
-/* Features Floating Section - Smaller and Better Positioned */
+/* Features Floating Section */
 .features-floating {
   position: fixed;
   top: 50%;
@@ -392,8 +385,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* gap: 4px; */
-  /* background: rgba(220, 20, 60, 0.08); */
   backdrop-filter: blur(10px);
   border: 1px solid rgba(129, 10, 34, 0.25);
   border-radius: 10px;
@@ -401,7 +392,6 @@ body {
   min-width: 75px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  animation: fadeInRight 0.6s ease;
   opacity: 0.85;
 }
 
@@ -418,21 +408,9 @@ body {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 0.85;
-    transform: translateX(0);
-  }
-}
-
 /* Payment Methods Section */
 .payment-methods {
   margin-top: 10px;
-  /* margin-bottom: 10px; */
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -537,7 +515,7 @@ body {
   .card {
     margin: 5vh auto;
     margin-bottom: 80px;
-    padding: 25px 25px 25px 25px;
+    padding: 25px;
   }
 
   .card-mascot img {
@@ -583,12 +561,11 @@ body {
 
 @media (max-width: 480px) {
   .card {
-    padding: 18px 20px 20px 20px;
+    padding: 18px 20px;
   }
 
   .card-mascot {
     transform: translate(-60%, -90%);
-    z-index: 10;
   }
 
   .card-mascot img {
@@ -600,13 +577,11 @@ body {
   }
 
   .feature-badge {
-    min-width: auto;
-    flex: 1;
     padding: 4px 2px;
     margin-bottom: 30px;
   }
 
-    .feature-icon {
+  .feature-icon {
     font-size: 1rem;
   }
 
@@ -650,7 +625,6 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-
   .card:hover {
     transform: translateY(-5px);
     box-shadow:
