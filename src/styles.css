@@ -49,13 +49,16 @@ body {
   height: 65vh;
   max-width: 35vw;
   object-fit: contain;
-  filter: drop-shadow(0 0 40px rgba(177, 0, 0, 0.4)); /* ✅ shadow أخف */
+  filter: drop-shadow(0 0 40px rgba(177, 0, 0, 0.4));
   pointer-events: none;
   z-index: 1;
-  /* ✅ Animation أخف */
-  animation: float 6s ease-in-out infinite;
-  /* ✅ استخدام will-change للتحسين */
-  will-change: transform;
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hero-img.show {
+  opacity: 1;
 }
 
 @keyframes float {
@@ -506,12 +509,19 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   .hero-img {
-    opacity: 0;
-    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+    will-change: transform;
   }
+}
 
+
+@media (max-width: 768px) {
+ .hero-img {
+    display: none !important;
+  }
+  
   .card {
     margin: 5vh auto;
     margin-bottom: 80px;

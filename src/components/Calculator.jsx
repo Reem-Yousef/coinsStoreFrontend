@@ -210,7 +210,8 @@ export default function Calculator() {
 
         <div className="card-header">
           <div className="header-title-wrapper">
-            <img src="/coin1.png" alt="Coin" className="coin-icon" />
+            <img src="/coin1.png" alt="Coin" className="coin-icon" loading="lazy"
+              decoding="async" />
             <h2 className="main-title">متجر الشيخ عفريت</h2>
           </div>
           <p className="subtitle">لشحن العملات السريع والامن</p>

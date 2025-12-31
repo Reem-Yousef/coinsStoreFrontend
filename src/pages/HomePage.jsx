@@ -5,13 +5,21 @@ import Calculator from "../components/Calculator";
 export default function HomePage() {
   const navigate = useNavigate();
   const [keySequence, setKeySequence] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imgVisible, setImgVisible] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // Detect device
+  useEffect(() => {
+    setIsDesktop(window.innerWidth > 768);
+  }, []);
 
   // Desktop: Secret keyboard shortcut
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key.match(/[a-z]/i)) {
-        setKeySequence(prev => (prev + e.key.toLowerCase()).slice(-5));
+        setKeySequence(prev =>
+          (prev + e.key.toLowerCase()).slice(-5)
+        );
       }
     };
 
@@ -26,34 +34,27 @@ export default function HomePage() {
     }
   }, [keySequence, navigate]);
 
-  // ✅ Preload الصورة الكبيرة
-  useEffect(() => {
-    const img = new Image();
-    img.src = "/background4.png";
-    img.onload = () => setImageLoaded(true);
-  }, []);
-
   return (
     <div className="page">
-      {/* ✅ Simplified gradient - أخف على الأداء */}
+      {/* Gradient خفيف */}
       <div className="gradient-bg"></div>
-      
-      {/* ✅ Lazy load الصورة مع fadeIn */}
-      {imageLoaded && (
-        <img 
-          src="/background4.png" 
-          className="hero-img" 
+
+      {/* ✅ الصورة تظهر على Desktop فقط */}
+      {isDesktop && (
+        <img
+          src="/background4.png"
+          className={`hero-img ${imgVisible ? "show" : ""}`}
           alt="TikTok"
-          loading="lazy"
+          fetchpriority="high"
           decoding="async"
-          style={{
-            animation: 'fadeIn 0.5s ease-in'
-          }}
+          width="500"
+          height="800"
+          onLoad={() => setImgVisible(true)}
         />
       )}
-      
+
       <Calculator />
-      
+
       <footer className="footer">
         <p>© 2025 TikTok Coins Calculator - All Rights Reserved</p>
       </footer>
