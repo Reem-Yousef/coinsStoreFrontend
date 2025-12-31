@@ -174,8 +174,10 @@ export default function Calculator() {
 
   if (loading) {
     return (
-      <div className="card">
-        <div className="loader"></div>
+      <div className="calculator-wrapper">
+        <div className="card">
+          <div className="loader"></div>
+        </div>
       </div>
     );
   }
@@ -202,16 +204,25 @@ export default function Calculator() {
           <img
             src="/3fret.png"
             alt="TikTok Mascot"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
+            width="220"
+            height="220"
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
         <div className="card-header">
           <div className="header-title-wrapper">
-            <img src="/coin1.png" alt="Coin" className="coin-icon" loading="lazy"
-              decoding="async" />
+            
+            <img
+              src="/coin1.png"
+              alt="Coin"
+              className="coin-icon"
+              width="23"
+              height="23"
+              loading="lazy"
+              decoding="async"
+            />
             <h2 className="main-title">متجر الشيخ عفريت</h2>
           </div>
           <p className="subtitle">لشحن العملات السريع والامن</p>
