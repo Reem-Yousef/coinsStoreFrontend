@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Calculator from './components/Calculator';
+import HomePage from './pages/HomePage'; // ✅ استخدم HomePage بدل Calculator
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 
@@ -66,7 +66,26 @@ function App() {
         fontSize: '1.2rem',
         fontFamily: 'Cairo, sans-serif'
       }}>
-        جاري التحميل...
+        <div style={{
+          textAlign: 'center'
+        }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            border: '4px solid rgba(255, 255, 255, 0.3)',
+            borderTop: '4px solid white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }} />
+          <div>جاري التحميل...</div>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }
@@ -74,8 +93,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home Route - Calculator */}
-        <Route path="/" element={<Calculator />} />
+        {/* Home Route - HomePage (فيها الخلفية والصورة والـ Calculator) */}
+        <Route path="/" element={<HomePage />} />
         
         {/* Admin Login Route */}
         <Route 
