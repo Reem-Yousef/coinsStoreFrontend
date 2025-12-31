@@ -1,35 +1,3 @@
-// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-// import { useState, useEffect } from "react";
-// import HomePage from "./pages/HomePage";
-// import AdminDashboard from "./pages/AdminDashboard";
-// import AdminLogin from "./pages/AdminLogin";
-// import "./styles.css";
-
-// function App() {
-//   const [isAdmin, setIsAdmin] = useState(false);
-
-//   useEffect(() => {
-//     const adminKey = localStorage.getItem('adminKey');
-//     setIsAdmin(!!adminKey);
-//   }, []);
-
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         <Route path="/" element={<HomePage />} />
-//         <Route path="/admin/login" element={<AdminLogin setIsAdmin={setIsAdmin} />} />
-//         <Route 
-//           path="/admin/dashboard" 
-//           element={isAdmin ? <AdminDashboard setIsAdmin={setIsAdmin} /> : <Navigate to="/admin/login" />} 
-//         />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-// export default App;
-
-
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Calculator from './components/Calculator';
@@ -50,15 +18,33 @@ function App() {
 
   // ✅ تحقق من الـ Token عند تحميل الصفحة
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       const token = localStorage.getItem('accessToken');
       
-      if (token) {
-        // ✅ لو فيه token، يبقى Admin
-        setIsAdmin(true);
-      } else {
-        // ❌ لو مفيش token، مش Admin
+      if (!token) {
         setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // ✅ تحقق من صلاحية الـ Token من الـ Backend
+        const res = await fetch('https://coins-store-backend.vercel.app/api/packages/admin/all', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (res.ok) {
+          setIsAdmin(true); // ✅ Token صالح
+        } else {
+          setIsAdmin(false); // ❌ Token منتهي أو غلط
+          localStorage.removeItem('accessToken');
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+        setIsAdmin(false);
+        localStorage.removeItem('accessToken');
       }
       
       setLoading(false);
@@ -77,7 +63,8 @@ function App() {
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #0a0000, #2d0000)',
         color: 'white',
-        fontSize: '1.2rem'
+        fontSize: '1.2rem',
+        fontFamily: 'Cairo, sans-serif'
       }}>
         جاري التحميل...
       </div>
@@ -87,9 +74,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home Route */}
+        {/* Home Route - Calculator */}
         <Route path="/" element={<Calculator />} />
-
+        
         {/* Admin Login Route */}
         <Route 
           path="/admin/login" 
@@ -101,7 +88,7 @@ function App() {
             )
           } 
         />
-
+        
         {/* Admin Dashboard Route - Protected */}
         <Route 
           path="/admin/dashboard" 
@@ -111,8 +98,8 @@ function App() {
             </ProtectedRoute>
           } 
         />
-
-        {/* 404 Route */}
+        
+        {/* 404 Route - Redirect to Home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
