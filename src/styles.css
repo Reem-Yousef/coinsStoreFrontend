@@ -514,13 +514,16 @@ body {
   }
 }
 
+.desktop-only { display: none; }
+
 @media (min-width: 769px) {
   .hero-img {
     animation: float 6s ease-in-out infinite;
     will-change: transform;
   }
-}
 
+.desktop-only { display: block; }
+}
 
 @media (max-width: 768px) {
  

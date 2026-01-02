@@ -41,16 +41,7 @@ export default function HomePage() {
 
       {/* ✅ الصورة تظهر على Desktop فقط */}
       {isDesktop && (
-        <img
-          src="/background4.png"
-          className={`hero-img ${imgVisible ? "show" : ""}`}
-          alt="TikTok"
-          fetchpriority="high"
-          decoding="async"
-          width="500"
-          height="800"
-          onLoad={() => setImgVisible(true)}
-        />
+       <img className="hero-img desktop-only" src="/background4.png" />
       )}
 
       <Calculator />
