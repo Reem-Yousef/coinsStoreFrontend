@@ -273,8 +273,9 @@ export default function Calculator() {
           <div className="payment-icons">
             <div className="payment-icon paypal">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+                src="/PayPal.svg.png"
                 alt="PayPal"
+                loading="lazy"
               />
             </div>
             <div className="payment-icon binance">

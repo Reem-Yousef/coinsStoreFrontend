@@ -16,30 +16,23 @@ body {
 .page {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0000 0%, #2d0000 100%); /* ✅ مبسّط */
+  background: linear-gradient(135deg, #0a0000 0%, #2d0000 100%);
   overflow: hidden;
 }
 
-/* ✅ Gradient مبسّط - بدل 3 gradients */
+/* ✅ Gradient مبسّط */
 .gradient-bg {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
   pointer-events: none;
   opacity: 0.8;
-  /* ✅ Animation أخف */
   animation: gradientShift 20s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
   0%, 100% { opacity: 0.7; }
   50% { opacity: 0.9; }
-}
-
-/* ✅ FadeIn للصورة */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .hero-img {
@@ -52,7 +45,6 @@ body {
   filter: drop-shadow(0 0 40px rgba(177, 0, 0, 0.4));
   pointer-events: none;
   z-index: 1;
-
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -66,10 +58,8 @@ body {
   50% { transform: translateY(-15px); }
 }
 
-/* Calculator Card */
-
 .calculator-wrapper {
-  min-height: 720px; /* مهم */
+  min-height: 720px;
 }
 
 .card {
@@ -89,11 +79,9 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 2;
   transition: transform 0.3s ease;
-  /* ✅ استخدام will-change */
   will-change: transform;
 }
 
-/* Red Creature at Top of Card */
 .card-mascot {
   position: absolute;
   top: 10%;
@@ -106,7 +94,6 @@ body {
 .card-mascot img {
   width: clamp(90px, 20vw, 250px);
   height: auto;
-  /* ✅ تحسين الصور */
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -125,7 +112,6 @@ body {
   width: 23px;
   height: 23px;
   object-fit: contain;
-  /* ✅ تحسين الصور الصغيرة */
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -144,7 +130,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* Input Groups */
 .input-group {
   margin-bottom: 10px;
 }
@@ -180,7 +165,6 @@ body {
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* Divider */
 .divider {
   display: flex;
   align-items: center;
@@ -194,7 +178,6 @@ body {
   background: rgba(245, 24, 68, 0.1);
   padding: 5px 16px;
   border-radius: 50%;
-  /* ✅ Animation أبطأ */
   animation: rotate 4s linear infinite;
 }
 
@@ -203,7 +186,6 @@ body {
   50% { transform: rotate(180deg); }
 }
 
-/* Warning Box */
 .warning-box {
   background: rgba(255, 193, 7, 0.15);
   border: 1px solid rgba(255, 193, 7, 0.5);
@@ -221,7 +203,6 @@ body {
   50% { opacity: 0.8; }
 }
 
-/* Charge Button */
 .btn-charge {
   width: 100%;
   padding: 8px;
@@ -255,7 +236,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Loader */
 .loader {
   width: 50px;
   height: 50px;
@@ -270,7 +250,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Popup */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -281,6 +260,11 @@ body {
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .popup {
@@ -331,7 +315,6 @@ body {
   line-height: 1;
 }
 
-/* Contact Links */
 .contact-links {
   display: flex;
   flex-direction: column;
@@ -358,7 +341,6 @@ body {
   font-size: 1.5rem;
 }
 
-/* Footer */
 .footer {
   position: fixed;
   bottom: 0;
@@ -377,7 +359,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Features Floating Section */
 .features-floating {
   position: fixed;
   top: 50%;
@@ -416,7 +397,6 @@ body {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-/* Payment Methods Section */
 .payment-methods {
   margin-top: 10px;
   padding-top: 10px;
@@ -485,7 +465,15 @@ body {
   padding: 6px 12px;
 }
 
-/* Responsive Design */
+/* ✅ Desktop فقط */
+@media (min-width: 769px) {
+  .hero-img {
+    animation: float 6s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+/* ✅ Tablet */
 @media (max-width: 1200px) {
   .features-floating {
     right: 2%;
@@ -509,47 +497,38 @@ body {
     font-size: 0.65rem;
   }
 
-  .hero-img{
+  .hero-img {
     right: 10%;
   }
 }
 
-.desktop-only { display: none; }
-
-@media (min-width: 769px) {
-  .hero-img {
-    animation: float 6s ease-in-out infinite;
-    will-change: transform;
-  }
-
-.desktop-only { display: block; }
-}
-
+/* ✅ موبايل - تحسينات قوية للأداء */
 @media (max-width: 768px) {
- 
- * {
+  /* إيقاف كل الـ Animations */
+  *, *::before, *::after {
     animation: none !important;
     transition: none !important;
   }
 
-  .gradient-bg {
-    display: none;
-  }
-
+  /* إخفاء العناصر الثقيلة */
+  .gradient-bg,
   .hero-img {
     display: none !important;
   }
-  
+
+  /* تبسيط الـ Card */
   .card {
-    margin: 5vh auto;
-    margin-bottom: 80px;
+    margin: 5vh auto 80px;
     padding: 25px;
+    backdrop-filter: none;
+    background: rgba(10, 0, 0, 0.95);
   }
 
   .card-mascot img {
     width: 200px;
   }
 
+  /* تبسيط الـ Features */
   .features-floating {
     position: relative;
     top: 15px;
@@ -568,6 +547,8 @@ body {
     flex: 1;
     padding: 6px 4px;
     margin-bottom: 30px;
+    backdrop-filter: none;
+    background: rgba(20, 0, 0, 0.9);
   }
 
   .feature-icon {
@@ -584,9 +565,21 @@ body {
 
   .footer {
     position: relative;
+    backdrop-filter: none;
+  }
+
+  /* تبسيط الـ Popup */
+  .popup {
+    backdrop-filter: none;
+    background: rgba(20, 0, 0, 0.98);
+  }
+
+  .popup-overlay {
+    backdrop-filter: none;
   }
 }
 
+/* شاشات صغيرة جداً */
 @media (max-width: 480px) {
   .card {
     padding: 18px 20px;
@@ -606,15 +599,10 @@ body {
 
   .feature-badge {
     padding: 4px 2px;
-    margin-bottom: 30px;
   }
 
   .feature-icon {
     font-size: 1rem;
-  }
-
-  .feature-badge span:last-child {
-    font-size: 0.65rem;
   }
 
   .input-group input {
@@ -652,6 +640,7 @@ body {
   }
 }
 
+/* Hover Effects للـ Desktop فقط */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     transform: translateY(-5px);

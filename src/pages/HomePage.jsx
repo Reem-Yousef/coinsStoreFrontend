@@ -10,7 +10,13 @@ export default function HomePage() {
 
   // Detect device
   useEffect(() => {
-    setIsDesktop(window.innerWidth > 768);
+    const checkDesktop = window.innerWidth > 768;
+    setIsDesktop(checkDesktop);
+    
+    // Show image with delay for fade effect
+    if (checkDesktop) {
+      setTimeout(() => setImgVisible(true), 100);
+    }
   }, []);
 
   // Desktop: Secret keyboard shortcut
@@ -39,9 +45,13 @@ export default function HomePage() {
       {/* Gradient خفيف */}
       <div className="gradient-bg"></div>
 
-      {/* ✅ الصورة تظهر على Desktop فقط */}
+      {/* ✅ الصورة تظهر على Desktop فقط مع fade-in */}
       {isDesktop && (
-       <img className="hero-img desktop-only" src="/background4.png" />
+        <img 
+          className={`hero-img ${imgVisible ? 'show' : ''}`} 
+          src="/background4.png" 
+          alt="Hero" 
+        />
       )}
 
       <Calculator />
