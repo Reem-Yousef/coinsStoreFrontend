@@ -202,8 +202,14 @@ export default function Calculator() {
       <div className="card">
         <div className="card-mascot">
           <picture>
-            <source srcSet="/3fret.webp" type="image/webp" />
+            <source 
+              srcSet="/3fret-small.webp 180w, /3fret.webp 220w" 
+              sizes="(max-width: 480px) 180px, 220px"
+              type="image/webp" 
+            />
             <img
+              srcSet="/3fret-small.png 180w, /3fret.png 220w"
+              sizes="(max-width: 480px) 180px, 220px"
               src="/3fret.png"
               alt="TikTok Mascot"
               width="220"
