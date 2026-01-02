@@ -201,28 +201,33 @@ export default function Calculator() {
 
       <div className="card">
         <div className="card-mascot">
-          <img
-            src="/3fret.png"
-            alt="TikTok Mascot"
-            width="220"
-            height="220"
-            loading="lazy"
-            decoding="async"
-          />
+          <picture>
+            <source srcSet="/3fret.webp" type="image/webp" />
+            <img
+              src="/3fret.png"
+              alt="TikTok Mascot"
+              width="220"
+              height="220"
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </div>
 
         <div className="card-header">
           <div className="header-title-wrapper">
-            
-            <img
-              src="/coin1.png"
-              alt="Coin"
-              className="coin-icon"
-              width="23"
-              height="23"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source srcSet="/coin1.webp" type="image/webp" />
+              <img
+                src="/coin1.png"
+                alt="Coin"
+                className="coin-icon"
+                width="23"
+                height="23"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
             <h2 className="main-title">متجر الشيخ عفريت</h2>
           </div>
           <p className="subtitle">لشحن العملات السريع والامن</p>
