@@ -14,8 +14,6 @@ export default function Calculator() {
   
   const coinsTimerRef = useRef(null);
   const amountTimerRef = useRef(null);
-  
-  // ✅ Cache للأسعار المحسوبة (عشان يبقى سريع)
   const coinsCacheRef = useRef({});
   const amountCacheRef = useRef({});
 
@@ -46,7 +44,6 @@ export default function Calculator() {
       return;
     }
 
-    // ✅ تحقق من الـ Cache أولاً
     if (coinsCacheRef.current[coinsNum]) {
       setAmount(coinsCacheRef.current[coinsNum]);
       return;
@@ -69,7 +66,6 @@ export default function Calculator() {
       
       if (data.success && data.price) {
         const priceStr = data.price.toFixed(2);
-        // ✅ احفظ في الـ Cache
         coinsCacheRef.current[coinsNum] = priceStr;
         setAmount(priceStr);
       } else {
@@ -91,7 +87,6 @@ export default function Calculator() {
       return;
     }
 
-    // ✅ تحقق من الـ Cache أولاً
     if (amountCacheRef.current[amountNum]) {
       setCoins(amountCacheRef.current[amountNum]);
       return;
@@ -120,7 +115,6 @@ export default function Calculator() {
         }
 
         const coinsStr = data.coins.toString();
-        // ✅ احفظ في الـ Cache
         amountCacheRef.current[amountNum] = coinsStr;
         setCoins(coinsStr);
       } else {
@@ -147,7 +141,6 @@ export default function Calculator() {
       return;
     }
     
-    // ✅ تقليل الوقت من 500ms لـ 300ms (أسرع)
     coinsTimerRef.current = setTimeout(() => {
       calculateFromCoins(value);
     }, 300);
@@ -166,10 +159,42 @@ export default function Calculator() {
       return;
     }
     
-    // ✅ تقليل الوقت من 500ms لـ 300ms (أسرع)
     amountTimerRef.current = setTimeout(() => {
       calculateFromAmount(value);
     }, 300);
+  };
+
+  // ✅ دالة لإنشاء رسالة مخصصة
+  const createMessage = () => {
+    return `مرحباً 👋
+
+أريد شحن:
+🪙 عدد الكوينات: ${coins}
+💰 المبلغ: ${amount} جنيه مصري
+
+يرجى تأكيد الطلب.`;
+  };
+
+  // ✅ دالة لإنشاء رابط مع الرسالة
+  const getContactLink = (contact) => {
+    const message = encodeURIComponent(createMessage());
+    
+    // للواتساب
+    if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
+      const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
+      const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
+      return `https://wa.me/${phone}?text=${message}`;
+    }
+    
+    // للتليجرام
+    if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
+      const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
+      const username = usernameMatch ? usernameMatch[1] : "";
+      return `https://t.me/${username}?text=${message}`;
+    }
+    
+    // للروابط الأخرى
+    return contact.url;
   };
 
   if (loading) {
@@ -316,7 +341,7 @@ export default function Calculator() {
               {contacts.map((contact) => (
                 <a
                   key={contact._id}
-                  href={contact.url}
+                  href={getContactLink(contact)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-btn"
