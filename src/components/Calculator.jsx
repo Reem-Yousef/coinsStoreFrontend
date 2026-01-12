@@ -14,8 +14,6 @@ export default function Calculator() {
   
   const coinsTimerRef = useRef(null);
   const amountTimerRef = useRef(null);
-  const coinsCacheRef = useRef({});
-  const amountCacheRef = useRef({});
 
   useEffect(() => {
     fetch(API_CONTACTS)
@@ -44,11 +42,6 @@ export default function Calculator() {
       return;
     }
 
-    if (coinsCacheRef.current[coinsNum]) {
-      setAmount(coinsCacheRef.current[coinsNum]);
-      return;
-    }
-
     setCalculating(true);
     try {
       const res = await fetch(API_CALCULATE, {
@@ -65,9 +58,7 @@ export default function Calculator() {
       const data = await res.json();
       
       if (data.success && data.price) {
-        const priceStr = data.price.toFixed(2);
-        coinsCacheRef.current[coinsNum] = priceStr;
-        setAmount(priceStr);
+        setAmount(data.price.toFixed(2));
       } else {
         setAmount("");
       }
@@ -109,8 +100,7 @@ export default function Calculator() {
           return;
         }
 
-        const coinsStr = data.coins.toString();
-        setCoins(coinsStr);
+        setCoins(data.coins.toString());
       } else {
         setCoins("");
       }
@@ -158,7 +148,6 @@ export default function Calculator() {
     }, 300);
   };
 
-  // ✅ دالة لإنشاء رسالة مخصصة
   const createMessage = () => {
     return `مرحباً 👋
 
@@ -169,25 +158,21 @@ export default function Calculator() {
 يرجى تأكيد الطلب.`;
   };
 
-  // ✅ دالة لإنشاء رابط مع الرسالة
   const getContactLink = (contact) => {
     const message = encodeURIComponent(createMessage());
     
-    // للواتساب
     if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
       const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
       const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
       return `https://wa.me/${phone}?text=${message}`;
     }
     
-    // للتليجرام
     if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
       const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
       const username = usernameMatch ? usernameMatch[1] : "";
       return `https://t.me/${username}?text=${message}`;
     }
     
-    // للروابط الأخرى
     return contact.url;
   };
 
@@ -265,7 +250,6 @@ export default function Calculator() {
             placeholder="أدخل عدد الكوينات"
             value={coins}
             onChange={(e) => onCoinsChange(e.target.value)}
-            onInput={(e) => onCoinsChange(e.target.value)}
             min="0"
             step="1"
           />
@@ -282,7 +266,6 @@ export default function Calculator() {
             placeholder="أدخل المبلغ"
             value={amount}
             onChange={(e) => onAmountChange(e.target.value)}
-            onInput={(e) => onAmountChange(e.target.value)}
             min="0"
             step="0.01"
           />
