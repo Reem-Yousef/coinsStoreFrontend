@@ -87,11 +87,6 @@ export default function Calculator() {
       return;
     }
 
-    if (amountCacheRef.current[amountNum]) {
-      setCoins(amountCacheRef.current[amountNum]);
-      return;
-    }
-
     setCalculating(true);
     try {
       const res = await fetch(API_CALCULATE, {
@@ -115,7 +110,6 @@ export default function Calculator() {
         }
 
         const coinsStr = data.coins.toString();
-        amountCacheRef.current[amountNum] = coinsStr;
         setCoins(coinsStr);
       } else {
         setCoins("");
