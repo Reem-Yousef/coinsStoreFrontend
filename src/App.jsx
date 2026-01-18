@@ -1,27 +1,19 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import HomePage from './pages/HomePage'; 
+import HomePage from './pages/HomePage';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-import ProtectedRoute from "./components/ProtectedRoute";
-
-// ✅ Protected Route Component
-function ProtectedRoute({ isAdmin, children }) {
-  if (!isAdmin) {
-    return <Navigate to="/admin/login" replace />;
-  }
-  return children;
-}
+import ProtectedRoute from "./components/ProtectedRoute"; // استيراد المكوّن من ملف مستقل
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ تحقق من الـ Token عند تحميل الصفحة
+  // تحقق من الـ Token عند تحميل الصفحة
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('accessToken');
-      
+
       if (!token) {
         setIsAdmin(false);
         setLoading(false);
@@ -29,7 +21,7 @@ function App() {
       }
 
       try {
-        // ✅ تحقق من صلاحية الـ Token من الـ Backend
+        // تحقق من صلاحية الـ Token من الـ Backend (غالبًا endpoint محمي)
         const res = await fetch('https://coins-store-backend.vercel.app/api/packages/admin/all', {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -37,9 +29,9 @@ function App() {
         });
 
         if (res.ok) {
-          setIsAdmin(true); // ✅ Token صالح
+          setIsAdmin(true); // Token صالح
         } else {
-          setIsAdmin(false); // ❌ Token منتهي أو غلط
+          setIsAdmin(false); // Token غير صالح
           localStorage.removeItem('accessToken');
         }
       } catch (err) {
@@ -47,14 +39,14 @@ function App() {
         setIsAdmin(false);
         localStorage.removeItem('accessToken');
       }
-      
+
       setLoading(false);
     };
 
     checkAuth();
   }, []);
 
-  // ✅ Loading state أثناء التحقق
+  // Loading state أثناء التحقق
   if (loading) {
     return (
       <div style={{
@@ -67,9 +59,7 @@ function App() {
         fontSize: '1.2rem',
         fontFamily: 'Cairo, sans-serif'
       }}>
-        <div style={{
-          textAlign: 'center'
-        }}>
+        <div style={{ textAlign: 'center' }}>
           <div style={{
             width: '50px',
             height: '50px',
@@ -94,39 +84,29 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home Route - HomePage (فيها الخلفية والصورة والـ Calculator) */}
+        {/* Home Route */}
         <Route path="/" element={<HomePage />} />
-        
-        {/* Admin Login Route */}
-        <Route 
-          path="/admin/login" 
+
+        {/* Admin Login - لو مصادق سيتم تحويله للداشبورد */}
+        <Route
+          path="/admin/login"
           element={
-            isAdmin ? (
-              <Navigate to="/admin/dashboard" replace />
-            ) : (
-              <AdminLogin setIsAdmin={setIsAdmin} />
-            )
-          } 
+            isAdmin ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin setIsAdmin={setIsAdmin} />
+          }
         />
-        
-        {/* Admin Dashboard Route - Protected */}
-        <Route 
-          path="/admin/dashboard" 
+
+        {/* Admin Dashboard - محمي */}
+        <Route
+          path="/admin/dashboard"
           element={
             <ProtectedRoute isAdmin={isAdmin}>
               <AdminDashboard setIsAdmin={setIsAdmin} />
             </ProtectedRoute>
-          } 
+          }
         />
-        
-        {/* 404 Route - Redirect to Home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
 
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route element={<ProtectedRoute requiredRole="admin" />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        </Route>
+        {/* 404 -> Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
