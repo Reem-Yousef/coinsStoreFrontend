@@ -671,3 +671,82 @@ body {
     transform: translateX(-5px);
   }
 }
+
+/* Footer سطر واحد */
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* زر صغير inline */
+.seo-info-inline {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(220, 20, 60, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.seo-info-inline:hover {
+  background: rgba(220, 20, 60, 0.15);
+}
+
+/* تحسينات شكل النص داخل SEO Popup */
+.seo-title {
+  font-size: 1.2rem;
+  margin: 10px 0 6px;
+}
+
+.seo-subtitle {
+  font-size: 1rem;
+  margin: 12px 0 6px;
+}
+
+.seo-text {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.seo-list {
+  margin: 0;
+  padding: 0 18px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ✅ الموبايل: Bottom Sheet */
+@media (max-width: 768px) {
+  .seo-sheet {
+    width: min(520px, 95vw);
+    border-radius: 18px 18px 0 0;
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    animation: sheetUp 0.25s ease;
+    padding: 18px 18px 22px;
+  }
+
+  @keyframes sheetUp {
+    from { transform: translateX(-50%) translateY(40px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+  }
+
+  /* الفوتر ثابت عندك: نخلي النص أصغر شوية عشان الزر يدخل في نفس السطر */
+  .footer-text {
+    font-size: 0.78rem;
+  }
+}
