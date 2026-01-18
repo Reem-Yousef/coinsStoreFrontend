@@ -1,40 +1,29 @@
+// src/pages/HomePage.jsx
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calculator from "../components/Calculator";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [keySequence, setKeySequence] = useState("");
   const [imgVisible, setImgVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [showSeoPopup, setShowSeoPopup] = useState(false);
 
-  // Detect device
   useEffect(() => {
     const checkDesktop = window.innerWidth > 768;
     setIsDesktop(checkDesktop);
-
     if (checkDesktop) setTimeout(() => setImgVisible(true), 100);
   }, []);
 
-  // Secret keyboard shortcut
+  // lock body scroll when popup open
   useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key.match(/[a-z]/i)) {
-        setKeySequence((prev) => (prev + e.key.toLowerCase()).slice(-5));
-      }
-    };
-
-    window.addEventListener("keypress", handleKeyPress);
-    return () => window.removeEventListener("keypress", handleKeyPress);
-  }, []);
-
-  useEffect(() => {
-    if (keySequence === "remoz") {
-      navigate("/admin/login");
-      setKeySequence("");
+    if (showSeoPopup) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
     }
-  }, [keySequence, navigate]);
+    return () => document.body.classList.remove("no-scroll");
+  }, [showSeoPopup]);
 
   return (
     <div className="page">
@@ -54,13 +43,12 @@ export default function HomePage() {
         <div
           className="popup-overlay"
           onClick={() => setShowSeoPopup(false)}
+          role="dialog"
+          aria-modal="true"
         >
           <div
-            className="popup seo-popup seo-sheet"
+            className="popup seo-popup centered-popup"
             onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-label="معلومات عن شحن عملات تيك توك"
           >
             <div className="popup-header">
               <h3>📌 شحن عملات تيك توك</h3>
