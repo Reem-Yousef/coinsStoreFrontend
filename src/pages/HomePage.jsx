@@ -5,6 +5,7 @@ import Calculator from "../components/Calculator";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [keySequence, setKeySequence] = useState("");
   const [imgVisible, setImgVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [showSeoPopup, setShowSeoPopup] = useState(false);
@@ -14,6 +15,26 @@ export default function HomePage() {
     setIsDesktop(checkDesktop);
     if (checkDesktop) setTimeout(() => setImgVisible(true), 100);
   }, []);
+
+    // Secret keyboard shortcut
+    useEffect(() => {
+      const handleKeyPress = (e) => {
+        if (e.key.match(/[a-z]/i)) {
+          setKeySequence((prev) => (prev + e.key.toLowerCase()).slice(-5));
+        }
+      };
+
+      window.addEventListener("keypress", handleKeyPress);
+      return () => window.removeEventListener("keypress", handleKeyPress);
+    }, []);
+
+    useEffect(() => {
+      if (keySequence === "remoz") {
+        navigate("/admin/login");
+        setKeySequence("");
+      }
+    }, [keySequence, navigate]);
+
 
   // lock body scroll when popup open
   useEffect(() => {
