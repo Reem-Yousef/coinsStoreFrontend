@@ -4,6 +4,7 @@ import { clearAccessToken } from "../utils/api";
 import PackagesManager from "../components/admin/PackagesManager";
 import ContactsManager from "../components/admin/ContactsManager";
 import "../styles/admin.css";
+import { Helmet } from "react-helmet-async";
 
 export default function AdminDashboard({ setIsAdmin }) {
   const [activeTab, setActiveTab] = useState("packages");
@@ -11,7 +12,6 @@ export default function AdminDashboard({ setIsAdmin }) {
 
   const handleLogout = async () => {
     try {
-      // ✅ اطلب logout من السيرفر
       await fetch("https://coins-store-backend.vercel.app/api/auth/logout", {
         method: 'POST',
         credentials: 'include'
@@ -20,38 +20,45 @@ export default function AdminDashboard({ setIsAdmin }) {
       console.error('Logout error:', err);
     }
 
-    // ✅ امسح الـ Token المحلي
     clearAccessToken();
     setIsAdmin(false);
     navigate("/admin/login");
   };
 
   return (
-    <div className="admin-dashboard">
-      <header className="admin-header">
-        <h1>⚙️ Admin Dashboard</h1>
-        <button onClick={handleLogout} className="btn-logout">Logout</button>
-      </header>
+    <>
+      {/* Helmet داخل الـ render */} 
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+        <title>Admin Dashboard – 3Fret</title>
+      </Helmet>
 
-      <div className="admin-tabs">
-        <button 
-          className={activeTab === "packages" ? "active" : ""}
-          onClick={() => setActiveTab("packages")}
-        >
-          📦 Pricing Packages
-        </button>
-        <button 
-          className={activeTab === "contacts" ? "active" : ""}
-          onClick={() => setActiveTab("contacts")}
-        >
-          📞 Contact Links
-        </button>
-      </div>
+      <div className="admin-dashboard">
+        <header className="admin-header">
+          <h1>⚙️ Admin Dashboard</h1>
+          <button onClick={handleLogout} className="btn-logout">Logout</button>
+        </header>
 
-      <div className="admin-content">
-        {activeTab === "packages" && <PackagesManager />}
-        {activeTab === "contacts" && <ContactsManager />}
+        <div className="admin-tabs">
+          <button
+            className={activeTab === "packages" ? "active" : ""}
+            onClick={() => setActiveTab("packages")}
+          >
+            📦 Pricing Packages
+          </button>
+          <button
+            className={activeTab === "contacts" ? "active" : ""}
+            onClick={() => setActiveTab("contacts")}
+          >
+            📞 Contact Links
+          </button>
+        </div>
+
+        <div className="admin-content">
+          {activeTab === "packages" && <PackagesManager />}
+          {activeTab === "contacts" && <ContactsManager />}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
