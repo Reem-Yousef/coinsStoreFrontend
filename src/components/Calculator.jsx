@@ -158,49 +158,24 @@ export default function Calculator() {
 يرجى تأكيد الطلب.`;
   };
 
-  // const getContactLink = (contact) => {
-  //   const message = encodeURIComponent(createMessage());
+  const getContactLink = (contact) => {
+    const message = encodeURIComponent(createMessage());
     
-  //   if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
-  //     const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
-  //     const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
-  //     return `https://wa.me/${phone}?text=${message}`;
-  //   }
+    if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
+      const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
+      const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
+      return `https://wa.me/${phone}?text=${message}`;
+    }
     
-  //   if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
-  //     const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
-  //     const username = usernameMatch ? usernameMatch[1] : "";
-  //     return `https://t.me/${username}?text=${message}`;
-  //   }
+    if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
+      const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
+      const username = usernameMatch ? usernameMatch[1] : "";
+      return `https://t.me/${username}?text=${message}`;
+    }
     
-  //   return contact.url;
-//   // };
-// const getContactLink = (contact) => {
-//   const message = encodeURIComponent(createMessage());
-  
-//   console.log("label:", contact.label);
-//   console.log("url:", contact.url);
-//   console.log("message:", message);
-  
-//   if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
-//     const link = `${contact.url}?text=${message}`;
-//     console.log("whatsapp link:", link);
-//     return link;
-//   }
-  
-//   if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
-//     const link = `${contact.url}?text=${message}`;
-//     console.log("telegram link:", link);
-//     return link;
-//   }
-  
-//   return contact.url;
-// };
+    return contact.url;
+  };
 
-const getContactLink = (contact) => {
-  const message = encodeURIComponent(createMessage());
-  return `${contact.url}?text=${message}`;
-};
 
   if (loading) {
     return (
