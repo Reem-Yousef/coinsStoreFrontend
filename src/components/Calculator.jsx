@@ -158,23 +158,44 @@ export default function Calculator() {
 يرجى تأكيد الطلب.`;
   };
 
+  // const getContactLink = (contact) => {
+  //   const message = encodeURIComponent(createMessage());
+    
+  //   if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
+  //     const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
+  //     const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
+  //     return `https://wa.me/${phone}?text=${message}`;
+  //   }
+    
+  //   if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
+  //     const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
+  //     const username = usernameMatch ? usernameMatch[1] : "";
+  //     return `https://t.me/${username}?text=${message}`;
+  //   }
+    
+  //   return contact.url;
+  // };
+
   const getContactLink = (contact) => {
-    const message = encodeURIComponent(createMessage());
-    
-    if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
-      const phoneMatch = contact.url.match(/phone=(\d+)|wa\.me\/(\d+)/);
-      const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2]) : "";
-      return `https://wa.me/${phone}?text=${message}`;
-    }
-    
-    if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
-      const usernameMatch = contact.url.match(/t\.me\/([^?]+)/);
-      const username = usernameMatch ? usernameMatch[1] : "";
-      return `https://t.me/${username}?text=${message}`;
-    }
-    
-    return contact.url;
-  };
+  const message = encodeURIComponent(createMessage());
+  const url = contact.url.trim();
+
+  // WhatsApp
+  if (contact.type === 'whatsapp' || url.includes('wa.me') || url.includes('whatsapp')) {
+    const phoneMatch = url.match(/wa\.me\/(\+?[\d]+)|phone=(\+?[\d]+)|whatsapp\.com\/send\?phone=(\+?[\d]+)/);
+    const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2] || phoneMatch[3]) : url.replace(/\D/g, '');
+    return `https://wa.me/${phone}?text=${message}`;
+  }
+
+  // Telegram
+  if (contact.type === 'telegram' || url.includes('t.me')) {
+    const usernameMatch = url.match(/t\.me\/([^?\/]+)/);
+    const username = usernameMatch ? usernameMatch[1] : "";
+    return `https://t.me/${username}?text=${message}`;
+  }
+
+  return url;
+};
 
 
   if (loading) {
