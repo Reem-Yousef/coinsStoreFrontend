@@ -175,20 +175,27 @@ export default function Calculator() {
     
   //   return contact.url;
   // };
-
-  const getContactLink = (contact) => {
+const getContactLink = (contact) => {
   const message = encodeURIComponent(createMessage());
-    
-    if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
-      return `${contact.url}?text=${message}`;
-    }
-    
-    if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
-      return `${contact.url}?text=${message}`;
-    }
-    
-    return contact.url;
-  };
+  
+  console.log("label:", contact.label);
+  console.log("url:", contact.url);
+  console.log("message:", message);
+  
+  if (contact.label.includes("واتساب") || contact.label.toLowerCase().includes("whatsapp")) {
+    const link = `${contact.url}?text=${message}`;
+    console.log("whatsapp link:", link);
+    return link;
+  }
+  
+  if (contact.label.includes("تليجرام") || contact.label.toLowerCase().includes("telegram")) {
+    const link = `${contact.url}?text=${message}`;
+    console.log("telegram link:", link);
+    return link;
+  }
+  
+  return contact.url;
+};
 
   if (loading) {
     return (
