@@ -345,7 +345,14 @@ export default function Calculator() {
                   rel="noopener noreferrer"
                   className="contact-btn"
                 >
-                  <span className="icon">{contact.icon}</span>
+                  {/* <span className="icon">{contact.icon}</span> */}
+                  <span className="icon">
+                    {contact.icon.startsWith("http") ? (
+                      <img src={contact.icon} alt="icon" width="20" />
+                    ) : (
+                      contact.icon
+                    )}
+                  </span>
                   {contact.label}
                 </a>
               ))}
