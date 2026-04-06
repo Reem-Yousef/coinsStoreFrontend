@@ -323,7 +323,7 @@ export default function Calculator() {
 
             <div className="contact-links">
               {contacts.map((contact) => (
-                
+                <a
                   key={contact._id}
                   href={getContactLink(contact)}
                   target="_blank"
